@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
+import 'package:flutter_pos_responsive_app/core/constants/variables.dart';
 import 'package:flutter_pos_responsive_app/presentation/main_navigation_page.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -8,6 +9,31 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Variables.isTestMode
+          ? AppBar(
+              title: const Text('Enhanced POS System'),
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.white,
+              actions: [
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    'TEST MODE',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : null,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -32,7 +58,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Enhanced POS System',
+                  Variables.isTestMode ? 'Enhanced POS System - Test Mode' : 'Enhanced POS System',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -42,7 +68,9 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Complete Workshop Management Solution',
+                  Variables.isTestMode 
+                      ? 'Testing Mode - All Features Available'
+                      : 'Complete Workshop Management Solution',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.grey[600],

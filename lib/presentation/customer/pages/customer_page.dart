@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
+import 'package:flutter_pos_responsive_app/core/constants/variables.dart';
 import 'package:flutter_pos_responsive_app/data/models/response/customer_response_model.dart';
 import 'package:flutter_pos_responsive_app/presentation/customer/bloc/customer_bloc.dart';
 
@@ -28,6 +29,23 @@ class _CustomerPageState extends State<CustomerPage> {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.white,
         actions: [
+          if (Variables.isTestMode)
+            Container(
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Text(
+                'TEST',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {

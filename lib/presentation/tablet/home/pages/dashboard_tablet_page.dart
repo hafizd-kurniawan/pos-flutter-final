@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pos_responsive_app/core/assets/assets.gen.dart';
 import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
+import 'package:flutter_pos_responsive_app/core/constants/variables.dart';
 import 'package:flutter_pos_responsive_app/core/extensions/build_context_ext.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/pages/login_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/widgets/nav_item.dart';
@@ -86,6 +87,25 @@ class _DashboardTabletPageState extends State<DashboardTabletPage> {
                     //   isTablet: true,
                     // ),
                     const Spacer(),
+                    // Test mode indicator
+                    if (Variables.isTestMode)
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Text(
+                          'TEST\nMODE',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     Container(
                       margin: const EdgeInsets.all(20.0),
                       child: IconButton(
