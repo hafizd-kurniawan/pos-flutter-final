@@ -19,7 +19,7 @@ import 'package:flutter_pos_responsive_app/presentation/history/bloc/history/his
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/category/category_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/product/product_bloc.dart';
-import 'package:flutter_pos_responsive_app/presentation/main_navigation_page.dart';
+import 'package:flutter_pos_responsive_app/presentation/welcome_screen.dart';
 import 'package:flutter_pos_responsive_app/presentation/order/bloc/order/order_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/outlet/bloc/outlet_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/service/bloc/service_bloc.dart';
@@ -96,7 +96,7 @@ class MyApp extends StatelessWidget {
                 // Return the tablet dashboard page
                 return DashboardTabletPage();
               }
-              return const MainNavigationPage();
+              return const WelcomeScreen();
             } else {
               // If not authenticated, show the login page
               return const LoginPage();

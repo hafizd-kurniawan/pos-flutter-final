@@ -3,6 +3,7 @@ import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
 import 'package:flutter_pos_responsive_app/presentation/customer/pages/customer_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/pages/dashboard_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/outlet/pages/outlet_page.dart';
+import 'package:flutter_pos_responsive_app/presentation/service/pages/service_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/service_job/pages/service_job_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     const DashboardPage(),
     const ServiceJobPage(),
     const CustomerPage(),
+    const ServicePage(),
     const OutletPage(),
   ];
 
@@ -30,13 +32,18 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     ),
     NavigationItem(
       icon: Icons.build,
-      label: 'Service Jobs',
-      description: 'Workshop Management',
+      label: 'Jobs',
+      description: 'Service Jobs',
     ),
     NavigationItem(
       icon: Icons.people,
       label: 'Customers',
       description: 'Customer Management',
+    ),
+    NavigationItem(
+      icon: Icons.miscellaneous_services,
+      label: 'Services',
+      description: 'Service Management',
     ),
     NavigationItem(
       icon: Icons.store,
@@ -68,7 +75,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: _navigationItems.asMap().entries.map((entry) {
@@ -79,7 +86,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                 return GestureDetector(
                   onTap: () => _onItemTapped(index),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.transparent,
                       borderRadius: BorderRadius.circular(12),
@@ -90,14 +97,14 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                         Icon(
                           item.icon,
                           color: isSelected ? AppColors.primary : Colors.grey,
-                          size: 24,
+                          size: 22,
                         ),
                         const SizedBox(height: 4),
                         Text(
                           item.label,
                           style: TextStyle(
                             color: isSelected ? AppColors.primary : Colors.grey,
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                           ),
                         ),
