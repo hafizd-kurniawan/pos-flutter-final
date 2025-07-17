@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
+import 'package:flutter_pos_responsive_app/core/constants/variables.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/auth_local_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/auth_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/category_remote_datasource.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_pos_responsive_app/presentation/home/bloc/category/categ
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/product/product_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/welcome_screen.dart';
+import 'package:flutter_pos_responsive_app/presentation/main_navigation_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/order/bloc/order/order_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/outlet/bloc/outlet_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/service/bloc/service_bloc.dart';
@@ -84,68 +86,310 @@ class MyApp extends StatelessWidget {
             iconTheme: const IconThemeData(color: AppColors.primary),
           ),
         ),
-        home: FutureBuilder<bool>(
-          future: AuthLocalDatasource().isAuthenticated(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasData && snapshot.data!) {
-              // If authenticated, navigate to the dashboard
-              //if tablet view go to TabletDashboardPage
-              if (MediaQuery.of(context).size.width >= 600) {
-                // Return the tablet dashboard page
-                return DashboardTabletPage();
-              }
-              return const WelcomeScreen();
-            } else {
-              // If not authenticated, show the login page
-              return const LoginPage();
-            }
-          },
-        ),
+        home: Variables.isTestMode ? _buildTestModeHome(context) : _buildNormalHome(context),
       ),
+    );
+  }
+
+  Widget _buildTestModeHome(BuildContext context) {
+    return TestModeWelcomeScreen();
+  }
+
+  Widget _buildNormalHome(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: AuthLocalDatasource().isAuthenticated(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData && snapshot.data!) {
+          // If authenticated, navigate to the dashboard
+          //if tablet view go to TabletDashboardPage
+          if (MediaQuery.of(context).size.width >= 600) {
+            // Return the tablet dashboard page
+            return DashboardTabletPage();
+          }
+          return const WelcomeScreen();
+        } else {
+          // If not authenticated, show the login page
+          return const LoginPage();
+        }
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class TestModeWelcomeScreen extends StatelessWidget {
+  const TestModeWelcomeScreen({super.key});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('Test Mode'),
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
+        actions: [
+          Container(
+            margin: const EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Text(
+              'TEST MODE',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
-      body: LoginPage(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.primary.withOpacity(0.1),
+              AppColors.primary.withOpacity(0.05),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.science,
+                  size: 100,
+                  color: Colors.orange,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'TEST MODE ACTIVE',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  Variables.testModeMessage,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.orange, width: 2),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.warning, color: Colors.orange),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Test Mode Features:',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.orange,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      _buildFeatureItem('✓ No login required'),
+                      _buildFeatureItem('✓ All features accessible'),
+                      _buildFeatureItem('✓ Dummy data for testing'),
+                      _buildFeatureItem('✓ Full POS functionality'),
+                      _buildFeatureItem('✓ Workshop management'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
+                _buildFeatureCard(
+                  icon: Icons.point_of_sale,
+                  title: 'Point of Sale',
+                  description: 'Manage orders, products, and transactions',
+                ),
+                const SizedBox(height: 16),
+                _buildFeatureCard(
+                  icon: Icons.build,
+                  title: 'Service Jobs',
+                  description: 'Track workshop repairs and maintenance',
+                ),
+                const SizedBox(height: 16),
+                _buildFeatureCard(
+                  icon: Icons.people,
+                  title: 'Customer Management',
+                  description: 'Manage customers and their vehicles',
+                ),
+                const SizedBox(height: 16),
+                _buildFeatureCard(
+                  icon: Icons.miscellaneous_services,
+                  title: 'Service Management',
+                  description: 'Define services and categories',
+                ),
+                const SizedBox(height: 16),
+                _buildFeatureCard(
+                  icon: Icons.store,
+                  title: 'Outlet Management',
+                  description: 'Manage multiple workshop locations',
+                ),
+                const SizedBox(height: 48),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const MainNavigationPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Start Testing',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[300],
+                          foregroundColor: Colors.grey[700],
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Use Login',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
+  }
+
+  Widget _buildFeatureItem(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeatureCard({
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: AppColors.primary,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
+import 'package:flutter_pos_responsive_app/core/constants/variables.dart';
 import 'package:flutter_pos_responsive_app/presentation/customer/pages/customer_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/pages/dashboard_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/outlet/pages/outlet_page.dart';
@@ -61,6 +62,31 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Variables.isTestMode
+          ? AppBar(
+              title: const Text('POS System'),
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.white,
+              actions: [
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    'TEST MODE',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : null,
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
