@@ -38,9 +38,9 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
     _generateInvoiceNumber();
     // Set default customer
     selectedCustomer = Customer(
-      id: 1,
+      customerId: 1,
       name: 'Customer Umum',
-      phone: '',
+      phoneNumber: '',
       address: '',
     );
   }
@@ -289,10 +289,10 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                                     showDialog(
                                       context: context,
                                       builder: (context) => ProductSelectionDialog(
-                                      onProductSelected: _addProductToCart,
-                                    ),
-                                  );
-                                },
+                                        onProductSelected: _addProductToCart,
+                                      ),
+                                    );
+                                  },
                                 icon: const Icon(Icons.add),
                                 label: const Text('Pilih'),
                                 style: ElevatedButton.styleFrom(
@@ -666,6 +666,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                                       Icons.person,
                                       color: selectedCustomer != null ? AppColors.primary : Colors.grey[600],
                                       size: 20,
+                                    ),
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
@@ -965,5 +966,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
     _barcodeController.dispose();
     _cashController.dispose();
     super.dispose();
+  }
+}
   }
 }
