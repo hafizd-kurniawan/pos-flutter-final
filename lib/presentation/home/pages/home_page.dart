@@ -46,11 +46,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.primary,
+        elevation: 0,
         title: const Text(
-          'Menu Cafe',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          'Kasir Sparepart',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
-
         centerTitle: true,
       ),
       body: ListView(
@@ -68,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                   width: 90,
                   child: MenuButton(
                     iconPath: Assets.icons.allCategories.path,
-                    label: 'All',
+                    label: 'Semua',
                     isActive: currentIndex == 0,
                     onPressed: () {
                       onCategoryTap(0);
