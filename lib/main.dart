@@ -9,6 +9,9 @@ import 'package:flutter_pos_responsive_app/data/datasource/order_remote_datasour
 import 'package:flutter_pos_responsive_app/data/datasource/product_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/report_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/service_job_remote_datasource.dart';
+import 'package:flutter_pos_responsive_app/data/datasource/customer_remote_datasource.dart';
+import 'package:flutter_pos_responsive_app/data/datasource/outlet_remote_datasource.dart';
+import 'package:flutter_pos_responsive_app/data/datasource/service_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/bloc/login/login_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/bloc/logout/logout_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/pages/login_page.dart';
@@ -20,6 +23,9 @@ import 'package:flutter_pos_responsive_app/presentation/welcome_screen.dart';
 import 'package:flutter_pos_responsive_app/presentation/main_navigation_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/order/bloc/order/order_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/service_job/bloc/service_job_bloc.dart';
+import 'package:flutter_pos_responsive_app/presentation/customer/bloc/customer_bloc.dart';
+import 'package:flutter_pos_responsive_app/presentation/outlet/bloc/outlet_bloc.dart';
+import 'package:flutter_pos_responsive_app/presentation/service/bloc/service_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/setting/bloc/product_sales/product_sales_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/setting/bloc/summary/summary_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/tablet/home/pages/dashboard_tablet_page.dart';
@@ -57,6 +63,15 @@ class MyApp extends StatelessWidget {
         // Core BLoC providers for automotive workshop
         BlocProvider(
           create: (context) => ServiceJobBloc(ServiceJobRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => CustomerBloc(CustomerRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => OutletBloc(OutletRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => ServiceBloc(ServiceRemoteDatasource()),
         ),
       ],
       child: MaterialApp(
