@@ -391,5 +391,4 @@ class TestModeWelcomeScreen extends StatelessWidget {
       ),
     );
   }
-  }
 }
