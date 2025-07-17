@@ -33,7 +33,9 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   ];
 
   void _onItemTapped(int index) {
-    debugPrint('Navigation item tapped: $index (${_navigationItems[index].label})');
+    debugPrint(
+      'Navigation item tapped: $index (${_navigationItems[index].label})',
+    );
     setState(() {
       _selectedIndex = index;
     });
@@ -89,33 +91,51 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                 final index = entry.key;
                 final item = entry.value;
                 final isSelected = _selectedIndex == index;
-                
+
                 return GestureDetector(
                   onTap: () => _onItemTapped(index),
                   behavior: HitTestBehavior.opaque,
                   child: Container(
-                    constraints: const BoxConstraints(minHeight: 60, minWidth: 80),
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    constraints: const BoxConstraints(
+                      minHeight: 60,
+                      minWidth: 80,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 16,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary.withOpacity(0.15) : Colors.transparent,
+                      color: isSelected
+                          ? AppColors.primary.withOpacity(0.15)
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(16),
-                      border: isSelected ? Border.all(color: AppColors.primary.withOpacity(0.3)) : null,
+                      border: isSelected
+                          ? Border.all(
+                              color: AppColors.primary.withOpacity(0.3),
+                            )
+                          : null,
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           item.icon,
-                          color: isSelected ? AppColors.primary : Colors.grey[600],
+                          color: isSelected
+                              ? AppColors.primary
+                              : Colors.grey[600],
                           size: 28,
                         ),
                         const SizedBox(height: 6),
                         Text(
                           item.label,
                           style: TextStyle(
-                            color: isSelected ? AppColors.primary : Colors.grey[600],
+                            color: isSelected
+                                ? AppColors.primary
+                                : Colors.grey[600],
                             fontSize: 12,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
                           ),
                         ),
                       ],
@@ -142,16 +162,16 @@ class NavigationItem {
     required this.description,
   });
 }
-}
 
-class NavigationItem {
-  final IconData icon;
-  final String label;
-  final String description;
+// class NavigationItem {
+//   final IconData icon;
+//   final String label;
+//   final String description;
+//
+//   NavigationItem({
+//     required this.icon,
+//     required this.label,
+//     required this.description,
+//   });
+// }
 
-  NavigationItem({
-    required this.icon,
-    required this.label,
-    required this.description,
-  });
-}

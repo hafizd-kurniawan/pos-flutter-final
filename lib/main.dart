@@ -55,7 +55,9 @@ class MyApp extends StatelessWidget {
           create: (context) => ProductSalesBloc(ReportRemoteDatasource()),
         ),
         // Core BLoC providers for automotive workshop
-        BlocProvider(create: (context) => ServiceJobBloc(ServiceJobRemoteDatasource())),
+        BlocProvider(
+          create: (context) => ServiceJobBloc(ServiceJobRemoteDatasource()),
+        ),
       ],
       child: MaterialApp(
         title: 'Sistem Bengkel Otomotif',
@@ -77,7 +79,9 @@ class MyApp extends StatelessWidget {
             iconTheme: const IconThemeData(color: AppColors.primary),
           ),
         ),
-        home: Variables.isTestMode ? _buildTestModeHome(context) : _buildNormalHome(context),
+        home: Variables.isTestMode
+            ? _buildTestModeHome(context)
+            : _buildNormalHome(context),
       ),
     );
   }
@@ -157,139 +161,134 @@ class TestModeWelcomeScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 40), // Add top spacing since alignment changed
-                  Icon(
-                  Icons.science,
-                  size: 100,
-                  color: Colors.orange,
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'SISTEM BENGKEL OTOMOTIF',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                  const SizedBox(height: 40),
+                  const Icon(Icons.science, size: 100, color: Colors.orange),
+                  const SizedBox(height: 24),
+                  Text(
+                    'SISTEM BENGKEL OTOMOTIF',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  Variables.testModeMessage,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
+                  const SizedBox(height: 16),
+                  Text(
+                    Variables.testModeMessage,
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.orange, width: 2),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.warning, color: Colors.orange),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'Fitur Mode Testing:',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
+                  const SizedBox(height: 32),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.orange, width: 2),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.warning, color: Colors.orange),
+                            const SizedBox(width: 8),
+                            const Expanded(
+                              child: Text(
+                                'Fitur Mode Testing:',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                ),
                               ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        _buildFeatureItem('✓ Tidak perlu login'),
+                        _buildFeatureItem('✓ Semua fitur dapat diakses'),
+                        _buildFeatureItem('✓ Data dummy untuk testing'),
+                        _buildFeatureItem('✓ Simulasi bengkel otomotif'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  _buildFeatureCard(
+                    icon: Icons.point_of_sale,
+                    title: 'Kasir (Sparepart)',
+                    description: 'Kelola penjualan sparepart dan aksesoris',
+                  ),
+                  const SizedBox(height: 16),
+                  _buildFeatureCard(
+                    icon: Icons.build_circle,
+                    title: 'Mekanik (Service)',
+                    description: 'Tracking service dan perbaikan kendaraan',
+                  ),
+                  const SizedBox(height: 48),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            debugPrint('Start Testing button tapped');
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const MainNavigationPage(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
-                        ],
+                          child: const Text(
+                            'MULAI TESTING',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 12),
-                      _buildFeatureItem('✓ Tidak perlu login'),
-                      _buildFeatureItem('✓ Semua fitur dapat diakses'),
-                      _buildFeatureItem('✓ Data dummy untuk testing'),
-                      _buildFeatureItem('✓ Simulasi bengkel otomotif'),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            debugPrint('Use Login button tapped');
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey[300],
+                            foregroundColor: Colors.grey[700],
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'GUNAKAN LOGIN',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 32),
-                _buildFeatureCard(
-                  icon: Icons.point_of_sale,
-                  title: 'Kasir (Sparepart)',
-                  description: 'Kelola penjualan sparepart dan aksesoris',
-                ),
-                const SizedBox(height: 16),
-                _buildFeatureCard(
-                  icon: Icons.build_circle,
-                  title: 'Mekanik (Service)',
-                  description: 'Tracking service dan perbaikan kendaraan',
-                ),
-                const SizedBox(height: 48),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          debugPrint('Start Testing button tapped'); // Debug log
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const MainNavigationPage(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text(
-                          'MULAI TESTING',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          debugPrint('Use Login button tapped'); // Debug log
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[300],
-                          foregroundColor: Colors.grey[700],
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text(
-                          'GUNAKAN LOGIN',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 40), // Add bottom spacing for better accessibility
-              ],
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
           ),
         ),
@@ -305,10 +304,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             text,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black87,
-            ),
+            style: const TextStyle(fontSize: 14, color: Colors.black87),
           ),
         ],
       ),
@@ -322,9 +318,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
   }) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
@@ -335,11 +329,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
                 color: AppColors.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                color: AppColors.primary,
-                size: 24,
-              ),
+              child: Icon(icon, color: AppColors.primary, size: 24),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -356,10 +346,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                 ],
               ),

@@ -227,83 +227,99 @@ class ServiceJobRemoteDatasource {
     try {
       // Simulate network delay
       await Future.delayed(const Duration(seconds: 1));
-      
-      return Right(ServiceJobResponseModel(
-        message: "Service jobs retrieved successfully",
-        data: _dummyServiceJobs,
-      ));
+
+      return Right(
+        ServiceJobResponseModel(
+          message: "Service jobs retrieved successfully",
+          data: _dummyServiceJobs,
+        ),
+      );
     } catch (e) {
       return Left("Error fetching service jobs: $e");
     }
   }
 
-  Future<Either<String, ServiceJobResponseModel>> getServiceJobById(int serviceJobId) async {
+  Future<Either<String, ServiceJobResponseModel>> getServiceJobById(
+    int serviceJobId,
+  ) async {
     try {
       // Simulate network delay
       await Future.delayed(const Duration(milliseconds: 500));
-      
+
       final serviceJob = _dummyServiceJobs.firstWhere(
         (job) => job.serviceJobId == serviceJobId,
         orElse: () => ServiceJob(),
       );
-      
+
       if (serviceJob.serviceJobId == null) {
         return Left("Service job not found");
       }
-      
-      return Right(ServiceJobResponseModel(
-        message: "Service job retrieved successfully",
-        data: [serviceJob],
-      ));
+
+      return Right(
+        ServiceJobResponseModel(
+          message: "Service job retrieved successfully",
+          data: [serviceJob],
+        ),
+      );
     } catch (e) {
       return Left("Error fetching service job: $e");
     }
   }
 
-  Future<Either<String, ServiceJobResponseModel>> getServiceJobsByStatus(String status) async {
+  Future<Either<String, ServiceJobResponseModel>> getServiceJobsByStatus(
+    String status,
+  ) async {
     try {
       // Simulate network delay
       await Future.delayed(const Duration(milliseconds: 800));
-      
+
       final filteredJobs = _dummyServiceJobs
           .where((job) => job.status?.toLowerCase() == status.toLowerCase())
           .toList();
-      
-      return Right(ServiceJobResponseModel(
-        message: "Service jobs retrieved successfully",
-        data: filteredJobs,
-      ));
+
+      return Right(
+        ServiceJobResponseModel(
+          message: "Service jobs retrieved successfully",
+          data: filteredJobs,
+        ),
+      );
     } catch (e) {
       return Left("Error fetching service jobs by status: $e");
     }
   }
 
-  Future<Either<String, ServiceJobResponseModel>> getServiceJobsByCustomer(int customerId) async {
+  Future<Either<String, ServiceJobResponseModel>> getServiceJobsByCustomer(
+    int customerId,
+  ) async {
     try {
       // Simulate network delay
       await Future.delayed(const Duration(milliseconds: 800));
-      
+
       final filteredJobs = _dummyServiceJobs
           .where((job) => job.customerId == customerId)
           .toList();
-      
-      return Right(ServiceJobResponseModel(
-        message: "Service jobs retrieved successfully",
-        data: filteredJobs,
-      ));
+
+      return Right(
+        ServiceJobResponseModel(
+          message: "Service jobs retrieved successfully",
+          data: filteredJobs,
+        ),
+      );
     } catch (e) {
       return Left("Error fetching service jobs by customer: $e");
     }
   }
 
-  Future<Either<String, ServiceJobResponseModel>> createServiceJob(Map<String, dynamic> data) async {
+  Future<Either<String, ServiceJobResponseModel>> createServiceJob(
+    Map<String, dynamic> data,
+  ) async {
     try {
       // Simulate network delay
       await Future.delayed(const Duration(seconds: 1));
-      
+
       final newServiceJob = ServiceJob(
         serviceJobId: _dummyServiceJobs.length + 1,
-        serviceCode: data['service_code'] ?? 'SJ${_dummyServiceJobs.length + 1:03d}',
+        serviceCode: data['service_code'] ?? 'SJ${_dummyServiceJobs.length}',
         queueNumber: _dummyServiceJobs.length + 1,
         customerId: data['customer_id'],
         vehicleId: data['vehicle_id'],
@@ -313,7 +329,7 @@ class ServiceJobRemoteDatasource {
         problemDescription: data['problem_description'],
         technicianNotes: data['technician_notes'],
         status: data['status'] ?? 'Menunggu',
-        serviceInDate: data['service_in_date'] != null 
+        serviceInDate: data['service_in_date'] != null
             ? DateTime.parse(data['service_in_date'])
             : DateTime.now(),
         downPayment: data['down_payment']?.toDouble() ?? 0.0,
@@ -325,29 +341,36 @@ class ServiceJobRemoteDatasource {
         createdBy: 1,
         serviceDetails: [],
       );
-      
+
       _dummyServiceJobs.add(newServiceJob);
-      
-      return Right(ServiceJobResponseModel(
-        message: "Service job created successfully",
-        data: [newServiceJob],
-      ));
+
+      return Right(
+        ServiceJobResponseModel(
+          message: "Service job created successfully",
+          data: [newServiceJob],
+        ),
+      );
     } catch (e) {
       return Left("Error creating service job: $e");
     }
   }
 
-  Future<Either<String, ServiceJobResponseModel>> updateServiceJob(int serviceJobId, Map<String, dynamic> data) async {
+  Future<Either<String, ServiceJobResponseModel>> updateServiceJob(
+    int serviceJobId,
+    Map<String, dynamic> data,
+  ) async {
     try {
       // Simulate network delay
       await Future.delayed(const Duration(seconds: 1));
-      
-      final index = _dummyServiceJobs.indexWhere((job) => job.serviceJobId == serviceJobId);
-      
+
+      final index = _dummyServiceJobs.indexWhere(
+        (job) => job.serviceJobId == serviceJobId,
+      );
+
       if (index == -1) {
         return Left("Service job not found");
       }
-      
+
       final existingJob = _dummyServiceJobs[index];
       final updatedJob = ServiceJob(
         serviceJobId: serviceJobId,
@@ -358,25 +381,30 @@ class ServiceJobRemoteDatasource {
         technicianId: data['technician_id'] ?? existingJob.technicianId,
         receivedByUserId: existingJob.receivedByUserId,
         outletId: existingJob.outletId,
-        problemDescription: data['problem_description'] ?? existingJob.problemDescription,
-        technicianNotes: data['technician_notes'] ?? existingJob.technicianNotes,
+        problemDescription:
+            data['problem_description'] ?? existingJob.problemDescription,
+        technicianNotes:
+            data['technician_notes'] ?? existingJob.technicianNotes,
         status: data['status'] ?? existingJob.status,
         serviceInDate: existingJob.serviceInDate,
-        pickedUpDate: data['picked_up_date'] != null 
+        pickedUpDate: data['picked_up_date'] != null
             ? DateTime.parse(data['picked_up_date'])
             : existingJob.pickedUpDate,
-        complainDate: data['complain_date'] != null 
+        complainDate: data['complain_date'] != null
             ? DateTime.parse(data['complain_date'])
             : existingJob.complainDate,
-        warrantyExpiresAt: data['warranty_expires_at'] != null 
+        warrantyExpiresAt: data['warranty_expires_at'] != null
             ? DateTime.parse(data['warranty_expires_at'])
             : existingJob.warrantyExpiresAt,
-        nextServiceReminderDate: data['next_service_reminder_date'] != null 
+        nextServiceReminderDate: data['next_service_reminder_date'] != null
             ? DateTime.parse(data['next_service_reminder_date'])
             : existingJob.nextServiceReminderDate,
-        downPayment: data['down_payment']?.toDouble() ?? existingJob.downPayment,
+        downPayment:
+            data['down_payment']?.toDouble() ?? existingJob.downPayment,
         grandTotal: data['grand_total']?.toDouble() ?? existingJob.grandTotal,
-        technicianCommission: data['technician_commission']?.toDouble() ?? existingJob.technicianCommission,
+        technicianCommission:
+            data['technician_commission']?.toDouble() ??
+            existingJob.technicianCommission,
         shopProfit: data['shop_profit']?.toDouble() ?? existingJob.shopProfit,
         createdAt: existingJob.createdAt,
         updatedAt: DateTime.now(),
@@ -387,29 +415,35 @@ class ServiceJobRemoteDatasource {
         outlet: existingJob.outlet,
         serviceDetails: existingJob.serviceDetails,
       );
-      
+
       _dummyServiceJobs[index] = updatedJob;
-      
-      return Right(ServiceJobResponseModel(
-        message: "Service job updated successfully",
-        data: [updatedJob],
-      ));
+
+      return Right(
+        ServiceJobResponseModel(
+          message: "Service job updated successfully",
+          data: [updatedJob],
+        ),
+      );
     } catch (e) {
       return Left("Error updating service job: $e");
     }
   }
 
-  Future<Either<String, ServiceJobResponseModel>> deleteServiceJob(int serviceJobId) async {
+  Future<Either<String, ServiceJobResponseModel>> deleteServiceJob(
+    int serviceJobId,
+  ) async {
     try {
       // Simulate network delay
       await Future.delayed(const Duration(seconds: 1));
-      
-      final index = _dummyServiceJobs.indexWhere((job) => job.serviceJobId == serviceJobId);
-      
+
+      final index = _dummyServiceJobs.indexWhere(
+        (job) => job.serviceJobId == serviceJobId,
+      );
+
       if (index == -1) {
         return Left("Service job not found");
       }
-      
+
       final existingJob = _dummyServiceJobs[index];
       final deletedJob = ServiceJob(
         serviceJobId: serviceJobId,
@@ -442,15 +476,18 @@ class ServiceJobRemoteDatasource {
         outlet: existingJob.outlet,
         serviceDetails: existingJob.serviceDetails,
       );
-      
+
       _dummyServiceJobs[index] = deletedJob;
-      
-      return Right(ServiceJobResponseModel(
-        message: "Service job deleted successfully",
-        data: [deletedJob],
-      ));
+
+      return Right(
+        ServiceJobResponseModel(
+          message: "Service job deleted successfully",
+          data: [deletedJob],
+        ),
+      );
     } catch (e) {
       return Left("Error deleting service job: $e");
     }
   }
 }
+

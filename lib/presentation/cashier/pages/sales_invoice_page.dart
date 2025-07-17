@@ -15,24 +15,32 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
   int _currentPage = 1;
   int _itemsPerPage = 10;
   String _searchQuery = '';
-  
+
   @override
   Widget build(BuildContext context) {
     final filteredOrders = dummyOrders.where((order) {
-      if (_searchQuery.isEmpty) return true;
-      return order.invoiceNumber?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false ||
-             order.customerName?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false ||
-             order.namaKasir.toLowerCase().contains(_searchQuery.toLowerCase());
+      final invoice = (order.invoiceNumber ?? '').toLowerCase();
+      final customer = (order.customerName ?? '').toLowerCase();
+      final kasir = order.namaKasir.toLowerCase();
+
+      final query = _searchQuery.toLowerCase();
+
+      return invoice.contains(query) ||
+          customer.contains(query) ||
+          kasir.contains(query);
     }).toList();
-    
+
     final totalEntries = filteredOrders.length;
     final startIndex = (_currentPage - 1) * _itemsPerPage;
-    final endIndex = (startIndex + _itemsPerPage > totalEntries) 
-        ? totalEntries 
+    final endIndex = (startIndex + _itemsPerPage > totalEntries)
+        ? totalEntries
         : startIndex + _itemsPerPage;
-    
-    final currentPageOrders = filteredOrders.skip(startIndex).take(_itemsPerPage).toList();
-    
+
+    final currentPageOrders = filteredOrders
+        .skip(startIndex)
+        .take(_itemsPerPage)
+        .toList();
+
     return Scaffold(
       body: Column(
         children: [
@@ -45,13 +53,10 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
               children: [
                 const Text(
                   'Data Barang Penjualan',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Controls Row
                 Row(
                   children: [
@@ -77,9 +82,9 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
                         const Text(' entries'),
                       ],
                     ),
-                    
+
                     const Spacer(),
-                    
+
                     // Search
                     SizedBox(
                       width: 200,
@@ -88,7 +93,10 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
                         decoration: const InputDecoration(
                           labelText: 'Search:',
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -103,7 +111,7 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
               ],
             ),
           ),
-          
+
           // Table Header
           Container(
             color: AppColors.primary,
@@ -183,7 +191,7 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
               ],
             ),
           ),
-          
+
           // Table Body
           Expanded(
             child: ListView.builder(
@@ -191,9 +199,12 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
               itemBuilder: (context, index) {
                 final order = currentPageOrders[index];
                 final displayIndex = startIndex + index + 1;
-                
+
                 return Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(color: Colors.grey[300]!),
@@ -202,17 +213,12 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
                   ),
                   child: Row(
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text('$displayIndex'),
-                      ),
+                      Expanded(flex: 1, child: Text('$displayIndex')),
                       Expanded(
                         flex: 2,
                         child: Text(
                           order.invoiceNumber ?? '-',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: const TextStyle(fontWeight: FontWeight.w500),
                         ),
                       ),
                       Expanded(
@@ -223,17 +229,12 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
                         flex: 2,
                         child: Text(order.customerName ?? 'Customer Umum'),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(order.namaKasir),
-                      ),
+                      Expanded(flex: 2, child: Text(order.namaKasir)),
                       Expanded(
                         flex: 2,
                         child: Text(
                           'Rp. ${NumberFormat('#,###').format(order.totalPrice)}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: const TextStyle(fontWeight: FontWeight.w500),
                         ),
                       ),
                       Expanded(
@@ -242,12 +243,18 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
                           children: [
                             IconButton(
                               onPressed: () => _viewOrderDetail(order),
-                              icon: const Icon(Icons.visibility, color: AppColors.primary),
+                              icon: const Icon(
+                                Icons.visibility,
+                                color: AppColors.primary,
+                              ),
                               tooltip: 'Lihat Detail',
                             ),
                             IconButton(
                               onPressed: () => _printInvoice(order),
-                              icon: const Icon(Icons.print, color: Colors.green),
+                              icon: const Icon(
+                                Icons.print,
+                                color: Colors.green,
+                              ),
                               tooltip: 'Print',
                             ),
                           ],
@@ -259,7 +266,7 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
               },
             ),
           ),
-          
+
           // Pagination Footer
           Container(
             padding: const EdgeInsets.all(16),
@@ -270,31 +277,32 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
                 Text(
                   'Showing ${startIndex + 1} to $endIndex of $totalEntries entries'
                   '${_searchQuery.isNotEmpty ? " (filtered from ${dummyOrders.length} total entries)" : ""}',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
                 ),
-                
+
                 // Pagination Controls
                 Row(
                   children: [
                     IconButton(
-                      onPressed: _currentPage > 1 
-                          ? () => setState(() { _currentPage--; })
+                      onPressed: _currentPage > 1
+                          ? () => setState(() {
+                              _currentPage--;
+                            })
                           : null,
                       icon: const Icon(Icons.chevron_left),
                     ),
-                    
+
                     // Page numbers
                     ...List.generate(
                       ((totalEntries / _itemsPerPage).ceil()).clamp(0, 5),
                       (index) {
                         final pageNumber = index + 1;
                         final isCurrentPage = pageNumber == _currentPage;
-                        
+
                         return GestureDetector(
-                          onTap: () => setState(() { _currentPage = pageNumber; }),
+                          onTap: () => setState(() {
+                            _currentPage = pageNumber;
+                          }),
                           child: Container(
                             margin: const EdgeInsets.symmetric(horizontal: 4),
                             padding: const EdgeInsets.symmetric(
@@ -302,27 +310,38 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: isCurrentPage ? AppColors.primary : Colors.transparent,
+                              color: isCurrentPage
+                                  ? AppColors.primary
+                                  : Colors.transparent,
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(
-                                color: isCurrentPage ? AppColors.primary : Colors.grey[300]!,
+                                color: isCurrentPage
+                                    ? AppColors.primary
+                                    : Colors.grey[300]!,
                               ),
                             ),
                             child: Text(
                               '$pageNumber',
                               style: TextStyle(
-                                color: isCurrentPage ? Colors.white : Colors.black,
-                                fontWeight: isCurrentPage ? FontWeight.bold : FontWeight.normal,
+                                color: isCurrentPage
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontWeight: isCurrentPage
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                               ),
                             ),
                           ),
                         );
                       },
                     ),
-                    
+
                     IconButton(
-                      onPressed: _currentPage < (totalEntries / _itemsPerPage).ceil()
-                          ? () => setState(() { _currentPage++; })
+                      onPressed:
+                          _currentPage < (totalEntries / _itemsPerPage).ceil()
+                          ? () => setState(() {
+                              _currentPage++;
+                            })
                           : null,
                       icon: const Icon(Icons.chevron_right),
                     ),
@@ -348,28 +367,42 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
             children: [
               _buildDetailRow('Invoice', order.invoiceNumber ?? '-'),
               _buildDetailRow('Tanggal', order.transactionDate ?? '-'),
-              _buildDetailRow('Customer', order.customerName ?? 'Customer Umum'),
+              _buildDetailRow(
+                'Customer',
+                order.customerName ?? 'Customer Umum',
+              ),
               _buildDetailRow('Kasir', order.namaKasir),
               _buildDetailRow('Metode Pembayaran', order.paymentMethod),
-              _buildDetailRow('Total', 'Rp. ${NumberFormat('#,###').format(order.totalPrice)}'),
+              _buildDetailRow(
+                'Total',
+                'Rp. ${NumberFormat('#,###').format(order.totalPrice)}',
+              ),
               const SizedBox(height: 16),
               const Text(
                 'Items:',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              ...order.orders.map<Widget>((item) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text('${item.product.name} x${item.quantity}'),
+              ...order.orders
+                  .map<Widget>(
+                    (item) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${item.product.name} x${item.quantity}',
+                            ),
+                          ),
+                          Text(
+                            'Rp. ${NumberFormat('#,###').format(int.parse(item.product.price!) * item.quantity)}',
+                          ),
+                        ],
+                      ),
                     ),
-                    Text('Rp. ${NumberFormat('#,###').format(int.parse(item.product.price!) * item.quantity)}'),
-                  ],
-                ),
-              )).toList(),
+                  )
+                  .toList(),
             ],
           ),
         ),
@@ -404,9 +437,7 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
 
   void _printInvoice(dynamic order) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Mencetak invoice ${order.invoiceNumber}...'),
-      ),
+      SnackBar(content: Text('Mencetak invoice ${order.invoiceNumber}...')),
     );
   }
 
@@ -416,3 +447,4 @@ class _SalesInvoicePageState extends State<SalesInvoicePage> {
     super.dispose();
   }
 }
+
