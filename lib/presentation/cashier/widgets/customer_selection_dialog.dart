@@ -246,7 +246,7 @@ class _CustomerSelectionDialogState extends State<CustomerSelectionDialog> {
       itemCount: customers.length,
       itemBuilder: (context, index) {
         final customer = customers[index];
-        final isSelected = widget.selectedCustomer?.id == customer.id;
+        final isSelected = widget.selectedCustomer?.customerId == customer.customerId;
 
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
@@ -277,10 +277,10 @@ class _CustomerSelectionDialogState extends State<CustomerSelectionDialog> {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (customer.phone?.isNotEmpty == true) ...[
+                if (customer.phoneNumber?.isNotEmpty == true) ...[
                   const SizedBox(height: 4),
                   Text(
-                    customer.phone!,
+                    customer.phoneNumber!,
                     style: TextStyle(
                       color: Colors.grey[600],
                     ),
