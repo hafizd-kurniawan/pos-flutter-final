@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
 import 'package:flutter_pos_responsive_app/core/constants/variables.dart';
-import 'package:flutter_pos_responsive_app/presentation/customer/pages/customer_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/pages/dashboard_page.dart';
-import 'package:flutter_pos_responsive_app/presentation/outlet/pages/outlet_page.dart';
-import 'package:flutter_pos_responsive_app/presentation/service/pages/service_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/service_job/pages/service_job_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
@@ -18,43 +15,25 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const DashboardPage(),
-    const ServiceJobPage(),
-    const CustomerPage(),
-    const ServicePage(),
-    const OutletPage(),
+    const DashboardPage(), // Kasir (Cashier)
+    const ServiceJobPage(), // Mekanik (Mechanic)
   ];
 
   final List<NavigationItem> _navigationItems = [
     NavigationItem(
       icon: Icons.point_of_sale,
-      label: 'POS',
-      description: 'Point of Sale System',
+      label: 'Kasir',
+      description: 'Point of Sale - Penjualan Sparepart',
     ),
     NavigationItem(
-      icon: Icons.build,
-      label: 'Jobs',
-      description: 'Service Jobs',
-    ),
-    NavigationItem(
-      icon: Icons.people,
-      label: 'Customers',
-      description: 'Customer Management',
-    ),
-    NavigationItem(
-      icon: Icons.miscellaneous_services,
-      label: 'Services',
-      description: 'Service Management',
-    ),
-    NavigationItem(
-      icon: Icons.store,
-      label: 'Outlets',
-      description: 'Branch Management',
+      icon: Icons.build_circle,
+      label: 'Mekanik',
+      description: 'Service Jobs - Pekerjaan Bengkel',
     ),
   ];
 
   void _onItemTapped(int index) {
-    debugPrint('Navigation item tapped: $index (${_navigationItems[index].label})'); // Debug log
+    debugPrint('Navigation item tapped: $index (${_navigationItems[index].label})');
     setState(() {
       _selectedIndex = index;
     });
@@ -63,46 +42,47 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Variables.isTestMode
-          ? AppBar(
-              title: const Text('POS System'),
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.white,
-              actions: [
-                Container(
-                  margin: const EdgeInsets.all(8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Text(
-                    'TEST MODE',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+      appBar: AppBar(
+        title: Text(_navigationItems[_selectedIndex].description),
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
+        centerTitle: true,
+        elevation: 0,
+        actions: [
+          if (Variables.isTestMode)
+            Container(
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'TEST MODE',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            )
-          : null,
+              ),
+            ),
+        ],
+      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: Colors.black.withOpacity(0.1),
               blurRadius: 10,
-              offset: Offset(0, -5),
+              offset: const Offset(0, -5),
             ),
           ],
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: _navigationItems.asMap().entries.map((entry) {
@@ -112,29 +92,30 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                 
                 return GestureDetector(
                   onTap: () => _onItemTapped(index),
-                  behavior: HitTestBehavior.opaque, // Ensure touch events are captured
+                  behavior: HitTestBehavior.opaque,
                   child: Container(
-                    constraints: const BoxConstraints(minHeight: 48, minWidth: 48), // Ensure minimum touch target
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    constraints: const BoxConstraints(minHeight: 60, minWidth: 80),
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
+                      color: isSelected ? AppColors.primary.withOpacity(0.15) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                      border: isSelected ? Border.all(color: AppColors.primary.withOpacity(0.3)) : null,
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           item.icon,
-                          color: isSelected ? AppColors.primary : Colors.grey,
-                          size: 22,
+                          color: isSelected ? AppColors.primary : Colors.grey[600],
+                          size: 28,
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 6),
                         Text(
                           item.label,
                           style: TextStyle(
-                            color: isSelected ? AppColors.primary : Colors.grey,
-                            fontSize: 10,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            color: isSelected ? AppColors.primary : Colors.grey[600],
+                            fontSize: 12,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                           ),
                         ),
                       ],
@@ -148,6 +129,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
       ),
     );
   }
+}
 }
 
 class NavigationItem {

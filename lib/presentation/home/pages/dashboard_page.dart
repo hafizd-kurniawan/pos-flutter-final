@@ -55,13 +55,13 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             NavItem(
               iconPath: Assets.icons.home.path,
-              label: 'Home',
+              label: 'Sparepart',
               isActive: _selectedIndex == 0,
               onTap: () => _onItemTapped(0),
             ),
             NavItem(
               iconPath: Assets.icons.orders.path,
-              label: 'Orders',
+              label: 'Pesanan',
               isActive: _selectedIndex == 1,
               onTap: () {
                 _onItemTapped(1);
@@ -70,13 +70,13 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             NavItem(
               iconPath: Assets.icons.payments.path,
-              label: 'History',
+              label: 'Riwayat',
               isActive: _selectedIndex == 2,
               onTap: () => _onItemTapped(2),
             ),
             NavItem(
               iconPath: Assets.icons.dashboard.path,
-              label: 'Setting',
+              label: 'Pengaturan',
               isActive: _selectedIndex == 3,
               onTap: () => _onItemTapped(3),
             ),

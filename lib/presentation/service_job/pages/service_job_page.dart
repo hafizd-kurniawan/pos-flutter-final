@@ -33,65 +33,64 @@ class _ServiceJobPageState extends State<ServiceJobPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Service Jobs'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.white,
-        actions: [
-          if (Variables.isTestMode)
-            Container(
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Text(
-                'TEST',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              _showAddServiceJobDialog(context);
-            },
-          ),
-        ],
-      ),
+      backgroundColor: AppColors.surface,
       body: Column(
         children: [
-          Padding(
+          // Header dengan status filter
+          Container(
             padding: const EdgeInsets.all(16),
-            child: DropdownButtonFormField<String>(
-              value: selectedStatus,
-              decoration: InputDecoration(
-                labelText: 'Filter by Status',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
                 ),
-                prefixIcon: const Icon(Icons.filter_list),
-              ),
-              items: statusOptions.map((status) {
-                return DropdownMenuItem(
-                  value: status,
-                  child: Text(status),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedStatus = value;
-                });
-                if (value == null || value == 'All') {
-                  context.read<ServiceJobBloc>().add(GetServiceJobsEvent());
-                } else {
-                  context.read<ServiceJobBloc>().add(GetServiceJobsByStatusEvent(value));
-                }
-              },
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: selectedStatus,
+                    decoration: InputDecoration(
+                      labelText: 'Filter Status Pekerjaan',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      prefixIcon: Icon(Icons.filter_list, color: AppColors.primary),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                    items: statusOptions.map((status) {
+                      return DropdownMenuItem(
+                        value: status,
+                        child: Text(status == 'All' ? 'Semua Status' : status),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedStatus = value;
+                      });
+                      if (value == null || value == 'All') {
+                        context.read<ServiceJobBloc>().add(GetServiceJobsEvent());
+                      } else {
+                        context.read<ServiceJobBloc>().add(GetServiceJobsByStatusEvent(value));
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                FloatingActionButton(
+                  mini: true,
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  onPressed: () {
+                    _showAddServiceJobDialog(context);
+                  },
+                  child: const Icon(Icons.add),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -101,14 +100,14 @@ class _ServiceJobPageState extends State<ServiceJobPage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(state.message),
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.red,
                     ),
                   );
                 } else if (state is ServiceJobSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(state.message),
-                      backgroundColor: Colors.green,
+                      backgroundColor: AppColors.green,
                     ),
                   );
                   context.read<ServiceJobBloc>().add(GetServiceJobsEvent());
@@ -125,28 +124,74 @@ class _ServiceJobPageState extends State<ServiceJobPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.error_outline,
+                          Icons.build_circle_outlined,
                           size: 64,
-                          color: Colors.red[300],
+                          color: Colors.grey[400],
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Error: ${state.message}',
-                          style: const TextStyle(fontSize: 16),
+                          'Gagal memuat data service',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          state.message,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[500],
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 16),
-                        ElevatedButton(
+                        ElevatedButton.icon(
                           onPressed: () {
                             context.read<ServiceJobBloc>().add(GetServiceJobsEvent());
                           },
-                          child: const Text('Retry'),
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Coba Lagi'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                          ),
                         ),
                       ],
                     ),
                   );
                 }
-                return const Center(child: Text('No data available'));
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.build_circle_outlined,
+                        size: 64,
+                        color: Colors.grey[400],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Belum ada pekerjaan service',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Tambah pekerjaan service baru untuk mulai tracking',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[500],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ),

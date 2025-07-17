@@ -1,33 +1,42 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  /// primary = #3949AB
-  static const Color primary = Color(0xff3949AB);
+  /// primary = #1565C0 (Professional Blue for Automotive)
+  static const Color primary = Color(0xff1565C0);
 
-  /// grey = #B7B7B7
-  static const Color grey = Color(0xffB7B7B7);
+  /// secondary = #FF6F00 (Orange accent for automotive tools)
+  static const Color secondary = Color(0xffFF6F00);
 
-  /// light = #F8F5FF
-  static const Color light = Color(0xffF8F5FF);
+  /// grey = #757575
+  static const Color grey = Color(0xff757575);
 
-  /// light = #C7D0EB
-  static const Color blueLight = Color(0xffC7D0EB);
+  /// light = #E3F2FD (Light blue background)
+  static const Color light = Color(0xffE3F2FD);
 
-  /// black = #000000
-  static const Color black = Color(0xff000000);
+  /// blueLight = #BBDEFB
+  static const Color blueLight = Color(0xffBBDEFB);
+
+  /// black = #212121
+  static const Color black = Color(0xff212121);
 
   /// white = #FFFFFF
   static const Color white = Color(0xffFFFFFF);
 
-  /// green = #50C474
-  static const Color green = Color(0xff50C474);
+  /// green = #4CAF50 (Success/Complete status)
+  static const Color green = Color(0xff4CAF50);
 
-  /// red = #F4261A
-  static const Color red = Color(0xffF4261A);
+  /// red = #F44336 (Error/Urgent status)
+  static const Color red = Color(0xffF44336);
 
-  /// card = #E5E5E5
-  static const Color card = Color(0xffE5E5E5);
+  /// amber = #FF9800 (Warning/In Progress status)
+  static const Color amber = Color(0xffFF9800);
 
-  /// disabled = #C8D1E1
-  static const Color disabled = Color(0xffC8D1E1);
+  /// card = #F5F5F5
+  static const Color card = Color(0xffF5F5F5);
+
+  /// disabled = #BDBDBD
+  static const Color disabled = Color(0xffBDBDBD);
+
+  /// surface = #FAFAFA
+  static const Color surface = Color(0xffFAFAFA);
 }

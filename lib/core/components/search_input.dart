@@ -27,7 +27,7 @@ class SearchInput extends StatelessWidget {
         controller: controller,
         onChanged: onChanged,
         decoration: InputDecoration(
-          hintText: 'Search...',
+          hintText: 'Cari sparepart...',
           prefixIcon: const Icon(
             Icons.search,
             color: AppColors.primary,
@@ -37,7 +37,7 @@ class SearchInput extends StatelessWidget {
               // context.push(const ScannerPage());
             },
             child: const Icon(
-              Icons.qr_code_2,
+              Icons.qr_code_scanner,
               color: AppColors.primary,
             ),
           ),

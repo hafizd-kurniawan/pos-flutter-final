@@ -1,153 +1,134 @@
-# Enhanced POS Flutter Final - Workshop Management System
+# Sistem Bengkel Otomotif - Professional Workshop Management System
 
-A comprehensive Point of Sale (POS) system enhanced with complete workshop management features, built with Flutter and implementing a robust ERD-based architecture.
+Sistem manajemen bengkel otomotif yang fokus dan profesional, dibangun dengan Flutter untuk memenuhi kebutuhan kasir dan mekanik bengkel.
 
-## 🚀 New Features Added
+## 🚀 Fitur Utama
 
-### 1. **Enhanced POS System**
-- Original POS functionality maintained
-- Product and category management
-- Order processing and history
-- Payment processing
-- Reporting and analytics
+### 1. **Kasir Sparepart**
+- Katalog sparepart otomotif lengkap
+- Sistem penjualan yang mudah digunakan
+- Pencarian sparepart dengan barcode scanner
+- Laporan penjualan real-time
+- Manajemen transaksi dan pembayaran
 
-### 2. **Workshop Management**
-- **Service Job Management**: Complete workflow for workshop repairs
-- **Customer Management**: Customer profiles with vehicle tracking
-- **Service Management**: Define services with categories and pricing
-- **Outlet Management**: Multi-location branch management
+### 2. **Manajemen Service Mekanik**
+- Tracking pekerjaan service kendaraan
+- Status progress perbaikan real-time
+- Manajemen antrian service
+- Riwayat pekerjaan lengkap
 
-### 3. **Advanced Features**
-- **Integrated Navigation**: Seamless navigation between POS and workshop features
-- **Responsive Design**: Works on mobile and tablet
-- **Real-time Updates**: Live status tracking for service jobs
-- **Search and Filter**: Advanced search capabilities across all modules
+## 🎯 Fokus Aplikasi
 
-## 📊 ERD Implementation
+Aplikasi ini dirancang khusus untuk:
+- **Kasir** - Penjualan sparepart dan aksesoris otomotif
+- **Mekanik** - Manajemen dan tracking pekerjaan service
 
-The system implements a comprehensive ERD covering:
+Tidak ada fitur yang tidak perlu - hanya yang essential untuk operasional bengkel otomotif.
 
-- **Users & Authentication**: Role-based access control
-- **Outlets**: Multi-branch management
-- **Customers & Vehicles**: Customer profiles with vehicle details
-- **Services & Categories**: Service management with categorization
-- **Service Jobs**: Complete workflow management
-- **Products & Inventory**: Product management with stock tracking
-- **Transactions**: Payment and transaction management
-- **Reports**: Analytics and reporting system
+## 📊 Data Sparepart
 
-## 🏗️ Architecture
+Aplikasi dilengkapi dengan data sparepart otomotif seperti:
+- Oli Mesin Shell Helix
+- Ban Michelin berbagai ukuran  
+- Filter udara dan oli
+- Aksesoris kendaraan
+- Komponen mesin
 
-- **State Management**: BLoC pattern for scalable state management
-- **API Integration**: Dummy API implementation ready for real backend
-- **Modular Design**: Clean architecture with separated concerns
-- **Error Handling**: Comprehensive error handling and loading states
+## 🏗️ Arsitektur
 
-## 🎯 Key Benefits
+- **State Management**: BLoC pattern untuk skalabilitas
+- **API Integration**: Dummy API siap untuk backend real
+- **Design Pattern**: Clean architecture
+- **Error Handling**: Comprehensive error handling
+- **Responsive Design**: Mobile dan tablet support
 
-1. **Complete Solution**: End-to-end workshop management system
-2. **Scalable**: Easy to extend with new features
-3. **Professional**: Production-ready code quality
-4. **Responsive**: Works across different screen sizes
-5. **API-Ready**: Easy to connect to real Golang backend
-
-## 🚀 Getting Started
+## 🚀 Memulai
 
 ### Prerequisites
-- Flutter SDK (3.8.1 or higher)
+- Flutter SDK (3.8.1 atau lebih tinggi)
 - Dart SDK
 - Android Studio / VS Code
 
-### Installation
-1. Clone the repository
+### Instalasi
+1. Clone repository
 2. Install dependencies:
    ```bash
    flutter pub get
    ```
-3. Run the application:
+3. Jalankan aplikasi:
    ```bash
    flutter run
    ```
 
-### Connecting to Real Backend
-1. Update `Variables.baseUrl` in `lib/core/constants/variables.dart`
-2. Replace dummy datasources with real API calls
-3. Update authentication flow as needed
+### Mode Testing
+Aplikasi dilengkapi mode testing untuk demonstrasi:
+- Tidak perlu login
+- Data dummy tersedia
+- Semua fitur dapat diakses
+- Simulasi real bengkel otomotif
 
-## 📱 Features Overview
+## 📱 Antarmuka Pengguna
 
-### POS System
-- Product catalog management
-- Category organization
-- Order processing
-- Payment handling
-- Transaction history
-- Sales reporting
+### Kasir (Sparepart)
+- Katalog produk yang mudah dicari
+- Checkout yang simpel dan cepat
+- Riwayat transaksi
+- Laporan penjualan
 
-### Workshop Management
-- **Service Jobs**: Create, track, and manage repair jobs
-- **Customer Management**: Customer profiles with vehicle details
-- **Service Management**: Define services with categories and pricing
-- **Outlet Management**: Manage multiple workshop locations
+### Mekanik (Service)
+- Daftar pekerjaan service
+- Update status progress
+- Filter berdasarkan status
+- Detail service job
 
-### Technical Features
-- **Dummy API Integration**: Complete dummy data for testing
-- **BLoC State Management**: Scalable state management
-- **Responsive Design**: Mobile and tablet support
-- **Error Handling**: Comprehensive error handling
-- **Loading States**: Proper loading indicators
-- **Search & Filter**: Advanced search capabilities
+## 🎨 Desain UI/UX
 
-## 🔧 Technical Stack
+- **Warna Profesional**: Biru otomotif dengan aksen orange
+- **Navigasi Sederhana**: Hanya 2 tab utama (Kasir & Mekanik)
+- **Bahasa Indonesia**: Interface lengkap dalam bahasa Indonesia
+- **Touch-Friendly**: Tombol besar untuk kemudahan penggunaan mobile
+- **Visual Feedback**: Indikator loading dan status yang jelas
+
+## 🔧 Stack Teknologi
 
 - **Frontend**: Flutter/Dart
 - **State Management**: BLoC
 - **HTTP Client**: Dart HTTP package
 - **Local Storage**: SharedPreferences
-- **UI Components**: Material Design
+- **UI Framework**: Material Design
 - **Architecture**: Clean Architecture
 
-## 📂 Project Structure
+## 📂 Struktur Project
 
 ```
 lib/
-├── core/                 # Core utilities and constants
+├── core/                 # Utilities dan constants
 ├── data/                # Data layer (models, datasources)
 ├── presentation/        # UI layer (pages, widgets, blocs)
-├── main.dart           # Application entry point
+├── main.dart           # Entry point aplikasi
 ```
 
-## 🎨 UI/UX Features
+## 🎯 Keunggulan
 
-- **Modern Design**: Clean and professional interface
-- **Intuitive Navigation**: Easy-to-use navigation system
-- **Responsive Layout**: Adapts to different screen sizes
-- **Loading States**: Proper loading indicators
-- **Error Messages**: User-friendly error messages
-- **Search Functionality**: Quick search across all modules
+1. **Fokus dan Sederhana** - Hanya fitur essential bengkel
+2. **Profesional** - UI/UX sesuai konteks otomotif
+3. **Mudah Digunakan** - Navigasi intuitif untuk kasir dan mekanik
+4. **Bahasa Lokal** - Interface lengkap bahasa Indonesia
+5. **Responsive** - Bekerja di mobile dan tablet
+6. **Siap Produksi** - Code quality production-ready
 
-## 🛠️ Development Notes
+## 🔮 Pengembangan Selanjutnya
 
-The application is built with production-ready standards:
-- Clean code architecture
-- Proper error handling
-- Comprehensive state management
-- Modular component structure
-- Ready for real API integration
+- Integrasi dengan backend real
+- Notifikasi real-time
+- Laporan advanced
+- Manajemen inventory
+- Integrasi payment gateway
 
-## 🔮 Future Enhancements
+## 📝 Lisensi
 
-- Real-time notifications
-- Advanced reporting
-- Inventory management
-- Employee management
-- Payment gateway integration
-- Cloud synchronization
-
-## 📝 License
-
-This project is developed for educational and demonstration purposes.
+Proyek ini dikembangkan untuk keperluan edukasi dan demonstrasi sistem bengkel otomotif.
 
 ---
 
-**Note**: This enhanced POS system provides a complete foundation for a professional workshop management solution with dummy API integration, ready to be connected to a real Golang backend.
+**Catatan**: Sistem bengkel otomotif ini menyediakan foundation lengkap untuk manajemen bengkel profesional dengan dummy API integration, siap untuk dihubungkan dengan backend Golang.

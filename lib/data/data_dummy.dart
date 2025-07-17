@@ -11,99 +11,170 @@ import '../presentation/home/models/order_item.dart';
 import 'models/response/product_response_model.dart';
 
 // =======================================================
-// KATALOG PRODUK UTAMA (TETAP ADA SEBAGAI REFERENSI)
+// KATALOG PRODUK UTAMA - SPAREPART & JASA BENGKEL
 // =======================================================
 List<Product> dummyProducts = [
-  // ... (Data dummyProducts Anda bisa tetap di sini sebagai katalog utama)
   Product(
     id: 1,
-
-    name: "Nasi Goreng Spesial",
-    price: '25000',
-    /* ... */ categoryId: 1, // Tambahkan categoryId untuk draft
-    createdAt: DateTime.now(), // Tambahkan createdAt untuk draft
-    updatedAt: DateTime.now(), // Tambahkan updatedAt untuk draft
-    category: Category(id: 1, name: "Makanan Berat"),
-    image: "https://example.com/pisang_goreng_keju.jpg",
-    stock: 100, // Tambahkan stock untuk draft
+    name: "Oli Mesin Shell Helix",
+    price: '85000',
+    categoryId: 1,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    category: Category(id: 1, name: "Sparepart"),
+    image: "https://example.com/oli_shell_helix.jpg",
+    stock: 50,
+  ),
+  Product(
+    id: 2,
+    name: "Ban Michelin 185/65R15",
+    price: '750000',
+    categoryId: 1,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    category: Category(id: 1, name: "Sparepart"),
+    image: "https://example.com/ban_michelin.jpg",
+    stock: 20,
+  ),
+  Product(
+    id: 3,
+    name: "Filter Udara",
+    price: '45000',
+    categoryId: 1,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    category: Category(id: 1, name: "Sparepart"),
+    image: "https://example.com/filter_udara.jpg",
+    stock: 30,
   ),
 ];
 
 List<CategoryModel> categories = [
-  CategoryModel(name: 'Drink', value: 'drink'),
-  CategoryModel(name: 'Food', value: 'food'),
-  CategoryModel(name: 'Snack', value: 'snack'),
+  CategoryModel(name: 'Sparepart', value: 'sparepart'),
+  CategoryModel(name: 'Jasa', value: 'jasa'),
+  CategoryModel(name: 'Aksesoris', value: 'aksesoris'),
 ];
 
 // =======================================================
-// DUMMY ORDERS (VERSI BARU - TANPA DEPENDENSI)
+// DUMMY ORDERS - TRANSAKSI BENGKEL
 // =======================================================
 List<OrderModel> dummyOrders = [
-  // Pesanan 1
+  // Order 1 - Ganti Oli + Filter
+  OrderModel(
+    id: 1,
+    paymentMethod: 'Cash',
+    nominalBayar: 130000,
+    orders: [
+      OrderItem(
+        product: Product(
+          id: 1,
+          name: "Oli Mesin Shell Helix",
+          price: '85000',
+          category: Category(id: 1, name: "Sparepart"),
+          image: "...",
+          stock: 50,
+          categoryId: 1,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+        quantity: 1,
+      ),
+      OrderItem(
+        product: Product(
+          id: 3,
+          name: "Filter Udara",
+          price: '45000',
+          category: Category(id: 1, name: "Sparepart"),
+          image: "...",
+          stock: 30,
+          categoryId: 1,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+        quantity: 1,
+      ),
+    ],
+    totalQuantity: 2,
+    totalPrice: 130000,
+    idKasir: 1,
+    namaKasir: "Ahmad Subandi",
+    isSync: true,
+    transactionTime: DateTime.now().subtract(const Duration(hours: 1)).toIso8601String(),
+  ),
 
-  // Pesanan 2
+  // Order 2 - Ganti Ban
   OrderModel(
     id: 2,
     paymentMethod: 'QRIS',
-    nominalBayar: 78000,
+    nominalBayar: 750000,
     orders: [
       OrderItem(
         product: Product(
           id: 2,
-
-          name: "Sate Ayam Madura",
-          price: '30000',
-          category: Category(id: 1, name: "Makanan Berat"),
+          name: "Ban Michelin 185/65R15",
+          price: '750000',
+          category: Category(id: 1, name: "Sparepart"),
           image: "...",
-          stock: 100, // Tambahkan stock untuk draft
-          categoryId: 1, // Tambahkan categoryId untuk draft
-          createdAt: DateTime.now(), // Tambahkan createdAt untuk draft
-          updatedAt: DateTime.now(), // Tambahkan updatedAt untuk draft
+          stock: 20,
+          categoryId: 1,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
         ),
-        quantity: 2,
+        quantity: 1,
       ),
     ],
-    totalQuantity: 3,
-    totalPrice: (2 * 30000) + 18000, // 78000
+    totalQuantity: 1,
+    totalPrice: 750000,
     idKasir: 2,
-    namaKasir: "Bunga Citra",
+    namaKasir: "Siti Nurhaliza",
     isSync: true,
-    transactionTime:
-        DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
+    transactionTime: DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
   ),
 ];
 
 // =======================================================
-// DUMMY ORDER ITEMS (VERSI BARU - TANPA DEPENDENSI)
+// DUMMY ORDER ITEMS - ITEM BENGKEL
 // =======================================================
 List<OrderItem> dummyOrderItems = [
   OrderItem(
     product: Product(
       id: 1,
-
-      name: "Nasi Goreng Spesial",
-      price: '25000',
-      category: Category(id: 1, name: "Makanan Berat"),
+      name: "Oli Mesin Shell Helix",
+      price: '85000',
+      category: Category(id: 1, name: "Sparepart"),
       image: "...",
-      stock: 100, // Tambahkan stock untuk draft
-      categoryId: 1, // Tambahkan categoryId untuk draft
-      createdAt: DateTime.now(), // Tambahkan createdAt untuk draft
-      updatedAt: DateTime.now(), // Tambahkan updatedAt untuk draft
+      stock: 50,
+      categoryId: 1,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     ),
-    quantity: 2,
+    quantity: 1,
   ),
   OrderItem(
     product: Product(
       id: 2,
-      // productId: 102,
-      name: "Sate Ayam Madura",
-      price: '30000',
-      category: Category(id: 1, name: "Makanan Berat"),
+      name: "Ban Michelin 185/65R15",
+      price: '750000',
+      category: Category(id: 1, name: "Sparepart"),
       image: "...",
-      stock: 100, // Tambahkan stock untuk draft
-      categoryId: 1, // Tambahkan categoryId untuk draft
-      createdAt: DateTime.now(), // Tambahkan createdAt untuk draft
-      updatedAt: DateTime.now(), // Tambahkan updatedAt untuk draft
+      stock: 20,
+      categoryId: 1,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    ),
+    quantity: 1,
+  ),
+  OrderItem(
+    product: Product(
+      id: 3,
+      name: "Filter Udara",
+      price: '45000',
+      category: Category(id: 1, name: "Sparepart"),
+      image: "...",
+      stock: 30,
+      categoryId: 1,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     ),
     quantity: 1,
   ),
@@ -194,37 +265,29 @@ List<OrderItem> dummyOrderItems = [
 // ];
 
 final List<ProductSales> dummyProductSalesData = [
-  // Laporan untuk Nasi Goreng Spesial
+  // Laporan untuk Oli Mesin Shell Helix
   ProductSales(
-    productId: 101,
-    productName: "Nasi Goreng Spesial",
-    productPrice: 25000,
-    totalQuantity: "35", // Total terjual 35 porsi
-    totalPrice: (25000 * 35), // "875000"
+    productId: 1,
+    productName: "Oli Mesin Shell Helix",
+    productPrice: 85000,
+    totalQuantity: "24", // Total terjual 24 botol
+    totalPrice: (85000 * 24), // "2040000"
   ),
-  // Laporan untuk Kopi Susu Gula Aren
+  // Laporan untuk Ban Michelin 185/65R15
   ProductSales(
-    productId: 303,
-    productName: "Kopi Susu Gula Aren",
-    productPrice: 22000,
-    totalQuantity: "52", // Total terjual 52 gelas
-    totalPrice: (22000 * 52), // "1144000"
+    productId: 2,
+    productName: "Ban Michelin 185/65R15", 
+    productPrice: 750000,
+    totalQuantity: "8", // Total terjual 8 buah
+    totalPrice: (750000 * 8), // "6000000"
   ),
-  // Laporan untuk Sate Ayam Madura
+  // Laporan untuk Filter Udara
   ProductSales(
-    productId: 102,
-    productName: "Sate Ayam Madura",
-    productPrice: 30000,
-    totalQuantity: "28", // Total terjual 28 porsi
-    totalPrice: (30000 * 28), // "840000"
-  ),
-  // Laporan untuk Pisang Goreng Keju
-  ProductSales(
-    productId: 201,
-    productName: "Pisang Goreng Keju",
-    productPrice: 15000,
-    totalQuantity: "45", // Total terjual 45 porsi
-    totalPrice: (15000 * 45), // "675000"
+    productId: 3,
+    productName: "Filter Udara",
+    productPrice: 45000,
+    totalQuantity: "15", // Total terjual 15 buah
+    totalPrice: (45000 * 15), // "675000"
   ),
 ];
 
@@ -235,18 +298,18 @@ final ProductSalesResponseModel dummyProductSalesResponse =
       status: "success",
       data: [
         ProductSales(
-          productId: 101,
-          productName: "Nasi Goreng Spesial",
-          productPrice: 25000,
-          totalQuantity: "35", // Total terjual 35 porsi
-          totalPrice: (25000 * 35), // "875000"
+          productId: 1,
+          productName: "Oli Mesin Shell Helix",
+          productPrice: 85000,
+          totalQuantity: "24", // Total terjual 24 botol
+          totalPrice: (85000 * 24), // "2040000"
         ),
         ProductSales(
-          productId: 303,
-          productName: "Kopi Susu Gula Aren",
-          productPrice: 22000,
-          totalQuantity: "52", // Total terjual 52 gelas
-          totalPrice: (22000 * 52), // "1144000"
+          productId: 2,
+          productName: "Ban Michelin 185/65R15",
+          productPrice: 750000,
+          totalQuantity: "8", // Total terjual 8 buah
+          totalPrice: (750000 * 8), // "6000000"
         ),
         ProductSales(
           productId: 102,
@@ -256,11 +319,11 @@ final ProductSalesResponseModel dummyProductSalesResponse =
           totalPrice: (30000 * 28), // "840000"
         ),
         ProductSales(
-          productId: 201,
-          productName: "Pisang Goreng Keju",
-          productPrice: 15000,
-          totalQuantity: "45", // Total terjual 45 porsi
-          totalPrice: (15000 * 45), // "675000"
+          productId: 3,
+          productName: "Filter Udara",
+          productPrice: 45000,
+          totalQuantity: "15", // Total terjual 15 buah
+          totalPrice: (45000 * 15), // "675000"
         ),
       ],
     );
