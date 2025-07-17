@@ -5,17 +5,13 @@ import 'package:flutter_pos_responsive_app/core/constants/variables.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/auth_local_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/auth_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/category_remote_datasource.dart';
-import 'package:flutter_pos_responsive_app/data/datasource/customer_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/order_remote_datasource.dart';
-import 'package:flutter_pos_responsive_app/data/datasource/outlet_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/product_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/report_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/service_job_remote_datasource.dart';
-import 'package:flutter_pos_responsive_app/data/datasource/service_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/bloc/login/login_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/bloc/logout/logout_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/pages/login_page.dart';
-import 'package:flutter_pos_responsive_app/presentation/customer/bloc/customer_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/history/bloc/history/history_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/category/category_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/checkout/checkout_bloc.dart';
@@ -23,8 +19,6 @@ import 'package:flutter_pos_responsive_app/presentation/home/bloc/product/produc
 import 'package:flutter_pos_responsive_app/presentation/welcome_screen.dart';
 import 'package:flutter_pos_responsive_app/presentation/main_navigation_page.dart';
 import 'package:flutter_pos_responsive_app/presentation/order/bloc/order/order_bloc.dart';
-import 'package:flutter_pos_responsive_app/presentation/outlet/bloc/outlet_bloc.dart';
-import 'package:flutter_pos_responsive_app/presentation/service/bloc/service_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/service_job/bloc/service_job_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/setting/bloc/product_sales/product_sales_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/setting/bloc/summary/summary_bloc.dart';
@@ -60,14 +54,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ProductSalesBloc(ReportRemoteDatasource()),
         ),
-        // New BLoC providers for enhanced POS features
-        BlocProvider(create: (context) => OutletBloc(OutletRemoteDatasource())),
-        BlocProvider(create: (context) => CustomerBloc(CustomerRemoteDatasource())),
-        BlocProvider(create: (context) => ServiceBloc(ServiceRemoteDatasource())),
+        // Core BLoC providers for automotive workshop
         BlocProvider(create: (context) => ServiceJobBloc(ServiceJobRemoteDatasource())),
       ],
       child: MaterialApp(
-        title: 'POS Responsive FIC 23',
+        title: 'Sistem Bengkel Otomotif',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
@@ -174,11 +165,11 @@ class TestModeWelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'TEST MODE ACTIVE',
+                  'SISTEM BENGKEL OTOMOTIF',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange,
+                    color: AppColors.primary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -207,7 +198,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              'Test Mode Features:',
+                              'Fitur Mode Testing:',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -218,43 +209,24 @@ class TestModeWelcomeScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 12),
-                      _buildFeatureItem('✓ No login required'),
-                      _buildFeatureItem('✓ All features accessible'),
-                      _buildFeatureItem('✓ Dummy data for testing'),
-                      _buildFeatureItem('✓ Full POS functionality'),
-                      _buildFeatureItem('✓ Workshop management'),
+                      _buildFeatureItem('✓ Tidak perlu login'),
+                      _buildFeatureItem('✓ Semua fitur dapat diakses'),
+                      _buildFeatureItem('✓ Data dummy untuk testing'),
+                      _buildFeatureItem('✓ Simulasi bengkel otomotif'),
                     ],
                   ),
                 ),
                 const SizedBox(height: 32),
                 _buildFeatureCard(
                   icon: Icons.point_of_sale,
-                  title: 'Point of Sale',
-                  description: 'Manage orders, products, and transactions',
+                  title: 'Kasir (Sparepart)',
+                  description: 'Kelola penjualan sparepart dan aksesoris',
                 ),
                 const SizedBox(height: 16),
                 _buildFeatureCard(
-                  icon: Icons.build,
-                  title: 'Service Jobs',
-                  description: 'Track workshop repairs and maintenance',
-                ),
-                const SizedBox(height: 16),
-                _buildFeatureCard(
-                  icon: Icons.people,
-                  title: 'Customer Management',
-                  description: 'Manage customers and their vehicles',
-                ),
-                const SizedBox(height: 16),
-                _buildFeatureCard(
-                  icon: Icons.miscellaneous_services,
-                  title: 'Service Management',
-                  description: 'Define services and categories',
-                ),
-                const SizedBox(height: 16),
-                _buildFeatureCard(
-                  icon: Icons.store,
-                  title: 'Outlet Management',
-                  description: 'Manage multiple workshop locations',
+                  icon: Icons.build_circle,
+                  title: 'Mekanik (Service)',
+                  description: 'Tracking service dan perbaikan kendaraan',
                 ),
                 const SizedBox(height: 48),
                 Row(
@@ -278,7 +250,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
                           ),
                         ),
                         child: const Text(
-                          'Start Testing',
+                          'MULAI TESTING',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -306,7 +278,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
                           ),
                         ),
                         child: const Text(
-                          'Use Login',
+                          'GUNAKAN LOGIN',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

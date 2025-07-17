@@ -9,31 +9,6 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Variables.isTestMode
-          ? AppBar(
-              title: const Text('Enhanced POS System'),
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.white,
-              actions: [
-                Container(
-                  margin: const EdgeInsets.all(8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Text(
-                    'TEST MODE',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            )
-          : null,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -51,63 +26,77 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.build_circle,
-                  size: 100,
-                  color: AppColors.primary,
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  Variables.isTestMode ? 'Enhanced POS System - Test Mode' : 'Enhanced POS System',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
+                // Logo atau Icon Bengkel
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.build_circle,
+                    size: 80,
                     color: AppColors.primary,
                   ),
+                ),
+                const SizedBox(height: 32),
+                
+                // Judul
+                Text(
+                  'SISTEM BENGKEL',
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                    letterSpacing: 1.2,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'OTOMOTIF',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary.withOpacity(0.7),
+                    letterSpacing: 0.8,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
+                
+                // Subtitle
                 Text(
                   Variables.isTestMode 
-                      ? 'Testing Mode - All Features Available'
-                      : 'Complete Workshop Management Solution',
+                      ? 'Mode Testing - Semua Fitur Tersedia'
+                      : 'Solusi Lengkap Manajemen Bengkel',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     color: Colors.grey[600],
+                    fontWeight: FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 48),
+                
+                // Feature Cards
                 _buildFeatureCard(
                   icon: Icons.point_of_sale,
-                  title: 'Point of Sale',
-                  description: 'Manage orders, products, and transactions',
+                  title: 'KASIR',
+                  description: 'Penjualan sparepart dan aksesoris otomotif',
+                  color: Colors.green,
                 ),
                 const SizedBox(height: 16),
                 _buildFeatureCard(
-                  icon: Icons.build,
-                  title: 'Service Jobs',
-                  description: 'Track workshop repairs and maintenance',
+                  icon: Icons.build_circle,
+                  title: 'MEKANIK',
+                  description: 'Manajemen service dan perbaikan kendaraan',
+                  color: Colors.blue,
                 ),
-                const SizedBox(height: 16),
-                _buildFeatureCard(
-                  icon: Icons.people,
-                  title: 'Customer Management',
-                  description: 'Manage customers and their vehicles',
-                ),
-                const SizedBox(height: 16),
-                _buildFeatureCard(
-                  icon: Icons.miscellaneous_services,
-                  title: 'Service Management',
-                  description: 'Define services and categories',
-                ),
-                const SizedBox(height: 16),
-                _buildFeatureCard(
-                  icon: Icons.store,
-                  title: 'Outlet Management',
-                  description: 'Manage multiple workshop locations',
-                ),
+                
                 const SizedBox(height: 48),
+                
+                // Get Started Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -121,20 +110,50 @@ class WelcomeScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 18),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                       ),
+                      elevation: 2,
                     ),
                     child: const Text(
-                      'Get Started',
+                      'MULAI BEKERJA',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
                 ),
+                
+                const SizedBox(height: 24),
+                
+                if (Variables.isTestMode)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.orange, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, color: Colors.orange, size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Mode testing aktif - Data dummy tersedia untuk simulasi',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.orange[800],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
@@ -147,38 +166,40 @@ class WelcomeScreen extends StatelessWidget {
     required IconData icon,
     required String title,
     required String description,
+    required Color color,
   }) {
     return Card(
-      elevation: 2,
+      elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                shape: BoxShape.circle,
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: AppColors.primary,
-                size: 24,
+                color: color,
+                size: 32,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 20),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: TextStyle(
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: color,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -187,6 +208,7 @@ class WelcomeScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[600],
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ],
