@@ -5,6 +5,7 @@ import 'package:flutter_pos_responsive_app/data/data_dummy.dart';
 import 'package:flutter_pos_responsive_app/data/models/response/product_response_model.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/models/order_item.dart';
+import 'package:flutter_pos_responsive_app/presentation/cashier/widgets/product_selection_dialog.dart';
 import 'package:intl/intl.dart';
 
 class CashierTransactionPage extends StatefulWidget {
@@ -198,22 +199,83 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          TextField(
-                            controller: _barcodeController,
-                            decoration: const InputDecoration(
-                              hintText: 'Scan atau ketik kode barang',
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _barcodeController,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Scan atau ketik kode barang',
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 8,
+                                    ),
+                                  ),
+                                  onSubmitted: _searchProduct,
+                                ),
                               ),
-                            ),
-                            onSubmitted: _searchProduct,
+                              const SizedBox(width: 8),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => ProductSelectionDialog(
+                                      onProductSelected: _addProductToCart,
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.add),
+                                label: const Text('Pilih Barang'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
                   ],
+                ),
+                
+                // Quick Access Buttons for Common Items
+                const SizedBox(height: 16),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Item Cepat:',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: dummyProducts.take(4).map((product) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ElevatedButton(
+                          onPressed: () => _addProductToCart(product),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: AppColors.primary,
+                            side: const BorderSide(color: AppColors.primary),
+                          ),
+                          child: Text(
+                            product.name!.length > 15 
+                                ? '${product.name!.substring(0, 15)}...'
+                                : product.name!,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ],
             ),
