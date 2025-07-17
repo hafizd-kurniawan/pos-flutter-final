@@ -876,48 +876,97 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
             ),
           ),
           
-          // Footer Section
+          // Footer Section - Transaction Summary & Processing
           Container(
-            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
-                  blurRadius: 15,
-                  offset: const Offset(0, -8),
+                  color: AppColors.primary.withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, -4),
                 ),
               ],
             ),
-            child: Column(
-              children: [
-                // Customer and Payment Type Section
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey[200]!),
-                  ),
-                  child: Row(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  // Section Header
+                  Row(
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.person_outline,
-                                  color: AppColors.primary,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 8),
-                                const Text(
-                                  'Customer',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
+                      Icon(
+                        Icons.receipt_long,
+                        color: AppColors.primary,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Ringkasan Transaksi',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const Spacer(),
+                      if (cartItems.isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '${cartItems.length} produk',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Customer and Payment Type Section
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.grey[50]!,
+                          Colors.white,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.person_outline,
+                                    color: AppColors.primary,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'Customer',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -944,37 +993,110 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                                 );
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: selectedCustomer != null 
+                                        ? AppColors.primary.withOpacity(0.5)
+                                        : Colors.grey[300]!,
+                                    width: 1.5,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: selectedCustomer != null 
+                                      ? AppColors.primary.withOpacity(0.05)
+                                      : Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.04),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(
-                                      Icons.person,
-                                      color: selectedCustomer != null ? AppColors.primary : Colors.grey[600],
-                                      size: 20,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      selectedCustomer?.name ?? 'Pilih Customer',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
                                         color: selectedCustomer != null 
-                                            ? Colors.black87 
-                                            : Colors.grey[600],
+                                            ? AppColors.primary 
+                                            : Colors.grey[400],
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Icon(
+                                        selectedCustomer != null 
+                                            ? Icons.person 
+                                            : Icons.person_outline,
+                                        color: Colors.white,
+                                        size: 20,
                                       ),
                                     ),
-                                  ),
-                                  Icon(
-                                    Icons.expand_more,
-                                    color: Colors.grey[600],
-                                  ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            selectedCustomer?.name ?? 'Pilih Customer',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              color: selectedCustomer != null 
+                                                  ? Colors.black87 
+                                                  : Colors.grey[600],
+                                            ),
+                                          ),
+                                          if (selectedCustomer != null) ...[
+                                            const SizedBox(height: 4),
+                                            if (selectedCustomer!.phoneNumber?.isNotEmpty == true)
+                                              Text(
+                                                selectedCustomer!.phoneNumber!,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            if (selectedCustomer!.vehicles?.isNotEmpty == true) ...[
+                                              const SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.directions_car,
+                                                    size: 14,
+                                                    color: AppColors.primary,
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    '${selectedCustomer!.vehicles!.length} kendaraan',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: AppColors.primary,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ] else ...[
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              'Klik untuk memilih customer',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey[500],
+                                              ),
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.expand_more,
+                                      color: selectedCustomer != null 
+                                          ? AppColors.primary 
+                                          : Colors.grey[400],
+                                    ),
                                 ],
                               ),
                             ),
@@ -1006,40 +1128,59 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                             ],
                           ),
                           const SizedBox(height: 12),
-                          DropdownButtonFormField<String>(
-                            value: paymentType,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(color: AppColors.primary.withOpacity(0.3)),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                            ),
-                            items: ['Cash', 'QRIS', 'Transfer'].map((type) {
-                              return DropdownMenuItem<String>(
-                                value: type,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      type == 'Cash' ? Icons.money : 
-                                      type == 'QRIS' ? Icons.qr_code : Icons.account_balance,
-                                      size: 18,
-                                      color: Colors.grey[600],
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(type),
-                                  ],
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.04),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
                                 ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                paymentType = value!;
-                              });
-                            },
+                              ],
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              value: paymentType,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                              items: [
+                                {'value': 'Cash', 'label': 'Tunai', 'icon': Icons.money},
+                                {'value': 'QRIS', 'label': 'QRIS', 'icon': Icons.qr_code},
+                                {'value': 'Transfer', 'label': 'Transfer Bank', 'icon': Icons.account_balance},
+                                {'value': 'Debit', 'label': 'Kartu Debit', 'icon': Icons.credit_card},
+                              ].map((type) {
+                                return DropdownMenuItem<String>(
+                                  value: type['value'] as String,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        type['icon'] as IconData,
+                                        size: 18,
+                                        color: AppColors.primary,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        type['label'] as String,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  paymentType = value!;
+                                });
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -1049,9 +1190,9 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                 
                 const SizedBox(height: 20),
                 
-                // Payment Calculation Section
+                // Transaction Summary Section
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
@@ -1061,8 +1202,15 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                         AppColors.primary.withOpacity(0.05),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Column(
                     children: [
@@ -1070,6 +1218,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                       Row(
                         children: [
                           Expanded(
+                            flex: 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -1109,19 +1258,25 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                           ),
                           const SizedBox(width: 16),
                           Expanded(
+                            flex: 1,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.payment,
+                                      paymentType == 'Cash' ? Icons.money : 
+                                      paymentType == 'QRIS' ? Icons.qr_code :
+                                      paymentType == 'Transfer' ? Icons.account_balance :
+                                      Icons.credit_card,
                                       color: AppColors.primary,
                                       size: 20,
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      'Bayar',
+                                      paymentType == 'Cash' ? 'Uang Diterima' : 
+                                      paymentType == 'QRIS' ? 'Scan QRIS' :
+                                      'Konfirmasi',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
@@ -1131,115 +1286,193 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                                   ],
                                 ),
                                 const SizedBox(height: 8),
-                                TextField(
-                                  controller: _cashController,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    hintText: '0',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                if (paymentType == 'Cash') ...[
+                                  TextField(
+                                    controller: _cashController,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      hintText: '0',
+                                      hintStyle: TextStyle(color: Colors.grey[400]),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                                      ),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                      prefixText: 'Rp ',
+                                      prefixStyle: TextStyle(
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(color: Colors.grey[400]!),
+                                    onChanged: _onCashChanged,
+                                  ),
+                                ] else ...[
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: AppColors.primary.withOpacity(0.3)),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(color: AppColors.primary, width: 2),
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                                    prefixText: 'Rp ',
-                                    prefixStyle: const TextStyle(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w500,
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          paymentType == 'QRIS' ? Icons.qr_code_2 : 
+                                          paymentType == 'Transfer' ? Icons.account_balance :
+                                          Icons.credit_card,
+                                          color: AppColors.primary,
+                                          size: 32,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          paymentType == 'QRIS' ? 'Siap Scan' :
+                                          paymentType == 'Transfer' ? 'Siap Transfer' :
+                                          'Siap Gesek',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.primary,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  onChanged: _onCashChanged,
-                                ),
+                                ],
                               ],
                             ),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 20),
                       
-                      const SizedBox(height: 16),
-                      
-                      // Change Amount
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: change >= 0 ? Colors.green[50] : Colors.red[50],
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: change >= 0 ? Colors.green[200]! : Colors.red[200]!,
+                      // Change Amount Display
+                      if (paymentType == 'Cash' && _cashController.text.isNotEmpty) ...[
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: change >= 0 ? Colors.green[50] : Colors.red[50],
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: change >= 0 ? Colors.green[300]! : Colors.red[300]!,
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                change >= 0 ? Icons.check_circle_outline : Icons.warning_outlined,
+                                color: change >= 0 ? Colors.green[600] : Colors.red[600],
+                                size: 24,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      change >= 0 ? 'Kembalian' : 'Uang Kurang',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      NumberFormat.currency(
+                                        locale: 'id_ID', 
+                                        symbol: 'Rp ',
+                                        decimalDigits: 0,
+                                      ).format(change.abs()),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: change >= 0 ? Colors.green[700] : Colors.red[700],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              change >= 0 ? Icons.check_circle : Icons.warning,
-                              color: change >= 0 ? Colors.green[600] : Colors.red[600],
-                              size: 24,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Kembalian',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey[700],
-                                    ),
-                                  ),
-                                  Text(
-                                    NumberFormat.currency(
-                                      locale: 'id_ID', 
-                                      symbol: 'Rp ',
-                                      decimalDigits: 0,
-                                    ).format(change >= 0 ? change : 0),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: change >= 0 ? Colors.green[700] : Colors.red[700],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                        const SizedBox(height: 16),
+                      ],
                     ],
                   ),
                 ),
                 
                 
                 // Process Payment Button
-                SizedBox(
+                Container(
                   width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: cartItems.isNotEmpty 
+                        ? LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              AppColors.primary,
+                              AppColors.primary.withOpacity(0.8),
+                            ],
+                          )
+                        : null,
+                    color: cartItems.isEmpty ? Colors.grey[300] : null,
+                    boxShadow: cartItems.isNotEmpty 
+                        ? [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ]
+                        : null,
+                  ),
                   child: ElevatedButton.icon(
-                    onPressed: cartItems.isNotEmpty ? _processPayment : null,
-                    icon: const Icon(Icons.payment, size: 24),
-                    label: const Text(
-                      'PROSES PEMBAYARAN',
-                      style: TextStyle(
+                    onPressed: cartItems.isNotEmpty && 
+                               (paymentType != 'Cash' || change >= 0) 
+                        ? _processPayment 
+                        : null,
+                    icon: Icon(
+                      paymentType == 'Cash' ? Icons.money :
+                      paymentType == 'QRIS' ? Icons.qr_code_scanner :
+                      paymentType == 'Transfer' ? Icons.account_balance :
+                      Icons.credit_card,
+                      size: 24,
+                    ),
+                    label: Text(
+                      cartItems.isEmpty 
+                          ? 'TAMBAHKAN PRODUK DULU'
+                          : paymentType == 'Cash' && change < 0
+                              ? 'UANG BELUM CUKUP'
+                              : 'PROSES PEMBAYARAN ${paymentType.toUpperCase()}',
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      disabledBackgroundColor: Colors.grey[300],
-                      disabledForegroundColor: Colors.grey[600],
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: cartItems.isNotEmpty ? Colors.white : Colors.grey[600],
+                      shadowColor: Colors.transparent,
                       padding: const EdgeInsets.symmetric(vertical: 18),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      elevation: cartItems.isNotEmpty ? 2 : 0,
+                      elevation: 0,
                     ),
                   ),
                 ),
