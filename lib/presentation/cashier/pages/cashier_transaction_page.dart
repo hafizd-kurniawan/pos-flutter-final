@@ -1481,7 +1481,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
           ),
         ],
       ),
-    ))));
+    ))))));
   }
 
   @override
