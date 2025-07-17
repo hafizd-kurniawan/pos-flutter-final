@@ -54,6 +54,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   ];
 
   void _onItemTapped(int index) {
+    debugPrint('Navigation item tapped: $index (${_navigationItems[index].label})'); // Debug log
     setState(() {
       _selectedIndex = index;
     });
@@ -111,7 +112,9 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                 
                 return GestureDetector(
                   onTap: () => _onItemTapped(index),
+                  behavior: HitTestBehavior.opaque, // Ensure touch events are captured
                   child: Container(
+                    constraints: const BoxConstraints(minHeight: 48, minWidth: 48), // Ensure minimum touch target
                     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.transparent,
