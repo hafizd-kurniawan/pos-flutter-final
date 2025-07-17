@@ -5,6 +5,7 @@ import '../../home/models/order_item.dart';
 
 class OrderModel {
   final int? id;
+  final String? invoiceNumber;
   final String paymentMethod;
   final int nominalBayar;
   final List<OrderItem> orders;
@@ -12,10 +13,13 @@ class OrderModel {
   final int totalPrice;
   final int idKasir;
   final String namaKasir;
+  final String? customerName;
   final String transactionTime;
+  final String? transactionDate;
   final bool isSync;
   OrderModel({
     this.id,
+    this.invoiceNumber,
     required this.paymentMethod,
     required this.nominalBayar,
     required this.orders,
@@ -23,12 +27,16 @@ class OrderModel {
     required this.totalPrice,
     required this.idKasir,
     required this.namaKasir,
+    this.customerName,
     required this.isSync,
     required this.transactionTime,
+    this.transactionDate,
   });
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
+      'invoiceNumber': invoiceNumber,
       'paymentMethod': paymentMethod,
       'nominalBayar': nominalBayar,
       'orders': orders.map((x) => x.toMap()).toList(),
@@ -36,7 +44,10 @@ class OrderModel {
       'totalPrice': totalPrice,
       'idKasir': idKasir,
       'namaKasir': namaKasir,
+      'customerName': customerName,
       'isSync': isSync,
+      'transactionTime': transactionTime,
+      'transactionDate': transactionDate,
     };
   }
 
@@ -71,6 +82,9 @@ class OrderModel {
       namaKasir: map['nama_kasir'] ?? '',
       id: map['id']?.toInt() ?? 0,
       transactionTime: map['transaction_time'] ?? '',
+      invoiceNumber: map['invoice_number'] ?? '',
+      customerName: map['customer_name'] ?? '',
+      transactionDate: map['transaction_date'] ?? '',
     );
   }
 
@@ -86,6 +100,9 @@ class OrderModel {
       namaKasir: map['nama_kasir'] ?? '',
       id: map['id']?.toInt() ?? 0,
       transactionTime: map['transaction_time'] ?? '',
+      invoiceNumber: map['invoice_number'] ?? '',
+      customerName: map['customer_name'] ?? '',
+      transactionDate: map['transaction_date'] ?? '',
     );
   }
 
@@ -102,6 +119,9 @@ class OrderModel {
       namaKasir: map['namaKasir'] ?? '',
       id: map['id']?.toInt() ?? 0,
       transactionTime: map['transactionTime'] ?? '',
+      invoiceNumber: map['invoiceNumber'] ?? '',
+      customerName: map['customerName'] ?? '',
+      transactionDate: map['transactionDate'] ?? '',
     );
   }
 

@@ -1,39 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pos_responsive_app/presentation/cashier/pages/cashier_main_page.dart';
-import 'package:flutter_pos_responsive_app/presentation/service_job/pages/service_job_page.dart';
 import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
 import 'package:flutter_pos_responsive_app/core/constants/variables.dart';
+import 'package:flutter_pos_responsive_app/presentation/cashier/pages/cashier_transaction_page.dart';
+import 'package:flutter_pos_responsive_app/presentation/cashier/pages/sales_invoice_page.dart';
+import 'package:flutter_pos_responsive_app/presentation/cashier/pages/piutang_page.dart';
 
-class MainNavigationPage extends StatefulWidget {
-  const MainNavigationPage({super.key});
+class CashierMainPage extends StatefulWidget {
+  const CashierMainPage({super.key});
 
   @override
-  State<MainNavigationPage> createState() => _MainNavigationPageState();
+  State<CashierMainPage> createState() => _CashierMainPageState();
 }
 
-class _MainNavigationPageState extends State<MainNavigationPage> {
+class _CashierMainPageState extends State<CashierMainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const CashierMainPage(), // Updated to use new cashier structure
-    const ServiceJobPage(), // Mekanik (Mechanic)
+    const CashierTransactionPage(),
+    const SalesInvoicePage(),
+    const PiutangPage(),
   ];
 
-  final List<NavigationItem> _navigationItems = [
-    NavigationItem(
+  final List<CashierNavigationItem> _navigationItems = [
+    CashierNavigationItem(
       icon: Icons.point_of_sale,
-      label: 'Kasir',
-      description: 'Point of Sale - Kasir Toko',
+      label: 'Transaksi',
+      description: 'Transaksi Kasir',
     ),
-    NavigationItem(
-      icon: Icons.build_circle,
-      label: 'Mekanik',
-      description: 'Service Jobs - Pekerjaan Bengkel',
+    CashierNavigationItem(
+      icon: Icons.receipt_long,
+      label: 'Penjualan',
+      description: 'Invoice Penjualan',
+    ),
+    CashierNavigationItem(
+      icon: Icons.account_balance_wallet,
+      label: 'Piutang',
+      description: 'Piutang',
     ),
   ];
 
   void _onItemTapped(int index) {
-    debugPrint('Navigation item tapped: $index (${_navigationItems[index].label})');
+    debugPrint('Cashier navigation item tapped: $index (${_navigationItems[index].label})');
     setState(() {
       _selectedIndex = index;
     });
@@ -43,7 +50,26 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_navigationItems[_selectedIndex].description),
+        title: Column(
+          children: [
+            const Text(
+              'TRANSAKSI TOKO',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              _navigationItems[_selectedIndex].description,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.white,
         centerTitle: true,
@@ -131,25 +157,12 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   }
 }
 
-class NavigationItem {
+class CashierNavigationItem {
   final IconData icon;
   final String label;
   final String description;
 
-  NavigationItem({
-    required this.icon,
-    required this.label,
-    required this.description,
-  });
-}
-}
-
-class NavigationItem {
-  final IconData icon;
-  final String label;
-  final String description;
-
-  NavigationItem({
+  CashierNavigationItem({
     required this.icon,
     required this.label,
     required this.description,
