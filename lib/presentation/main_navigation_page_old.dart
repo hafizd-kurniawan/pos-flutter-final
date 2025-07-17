@@ -196,3 +196,16 @@ class NavigationItem {
     required this.description,
   });
 }
+
+// class NavigationItem {
+//   final IconData icon;
+//   final String label;
+//   final String description;
+//
+//   NavigationItem({
+//     required this.icon,
+//     required this.label,
+//     required this.description,
+//   });
+// }
+
