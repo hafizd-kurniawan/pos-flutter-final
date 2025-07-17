@@ -958,7 +958,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
           ),
         ],
       ),
-    );
+    ))));
   }
 
   @override
@@ -966,7 +966,5 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
     _barcodeController.dispose();
     _cashController.dispose();
     super.dispose();
-  }
-}
   }
 }
