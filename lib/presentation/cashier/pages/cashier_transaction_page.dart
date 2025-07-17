@@ -486,22 +486,30 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                                       Expanded(
                                         flex: 2,
                                         child: Text(
-                                  'Rp. ${NumberFormat('#,###').format(int.parse(item.product.price!))}',
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ),
+                                          NumberFormat.currency(
+                                            locale: 'id_ID', 
+                                            symbol: 'Rp ',
+                                            decimalDigits: 0,
+                                          ).format(int.parse(item.product.price!)),
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
                               Expanded(
                                 flex: 1,
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     GestureDetector(
                                       onTap: () => _updateQuantity(index, item.quantity - 1),
                                       child: Container(
-                                        width: 24,
-                                        height: 24,
+                                        width: 28,
+                                        height: 28,
                                         decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.red[400],
+                                          borderRadius: BorderRadius.circular(14),
                                         ),
                                         child: const Icon(
                                           Icons.remove,
@@ -510,18 +518,25 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                                      child: Text('${item.quantity}'),
+                                    Container(
+                                      width: 40,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '${item.quantity}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
                                     GestureDetector(
                                       onTap: () => _updateQuantity(index, item.quantity + 1),
                                       child: Container(
-                                        width: 24,
-                                        height: 24,
+                                        width: 28,
+                                        height: 28,
                                         decoration: BoxDecoration(
                                           color: AppColors.primary,
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(14),
                                         ),
                                         child: const Icon(
                                           Icons.add,
@@ -536,15 +551,29 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  'Rp. ${NumberFormat('#,###').format(subtotal)}',
-                                  style: const TextStyle(fontSize: 14),
+                                  NumberFormat.currency(
+                                    locale: 'id_ID', 
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0,
+                                  ).format(subtotal),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primary,
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 flex: 1,
-                                child: IconButton(
-                                  onPressed: () => _removeProductFromCart(index),
-                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                child: Center(
+                                  child: IconButton(
+                                    onPressed: () => _removeProductFromCart(index),
+                                    icon: Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.red[400],
+                                      size: 20,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -559,66 +588,84 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
           
           // Footer Section
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, -5),
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 15,
+                  offset: const Offset(0, -8),
                 ),
               ],
             ),
             child: Column(
               children: [
-                // Customer and Payment Type
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Customer',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => BlocProvider(
-                                  create: (context) => CustomerBloc(
-                                    CustomerRemoteDatasource(),
-                                  ),
-                                  child: CustomerSelectionDialog(
-                                    selectedCustomer: selectedCustomer,
-                                    onCustomerSelected: (customer) {
-                                      setState(() {
-                                        selectedCustomer = customer;
-                                      });
-                                    },
+                // Customer and Payment Type Section
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[200]!),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.person_outline,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Customer',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey,
                                   ),
                                 ),
-                              );
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey[400]!),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.person,
-                                    color: Colors.grey[600],
-                                    size: 20,
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => BlocProvider(
+                                    create: (context) => CustomerBloc(
+                                      CustomerRemoteDatasource(),
+                                    ),
+                                    child: CustomerSelectionDialog(
+                                      selectedCustomer: selectedCustomer,
+                                      onCustomerSelected: (customer) {
+                                        setState(() {
+                                          selectedCustomer = customer;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person,
+                                      color: selectedCustomer != null ? AppColors.primary : Colors.grey[600],
+                                      size: 20,
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
@@ -626,6 +673,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                                       selectedCustomer?.name ?? 'Pilih Customer',
                                       style: TextStyle(
                                         fontSize: 14,
+                                        fontWeight: FontWeight.w500,
                                         color: selectedCustomer != null 
                                             ? Colors.black87 
                                             : Colors.grey[600],
@@ -633,7 +681,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                                     ),
                                   ),
                                   Icon(
-                                    Icons.arrow_drop_down,
+                                    Icons.expand_more,
                                     color: Colors.grey[600],
                                   ),
                                 ],
@@ -648,24 +696,52 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Tipe Pembayaran',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.payment,
+                                color: AppColors.primary,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'Pembayaran',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 12),
                           DropdownButtonFormField<String>(
                             value: paymentType,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: AppColors.primary.withOpacity(0.3)),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                             ),
                             items: ['Cash', 'QRIS', 'Transfer'].map((type) {
                               return DropdownMenuItem<String>(
                                 value: type,
-                                child: Text(type),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      type == 'Cash' ? Icons.money : 
+                                      type == 'QRIS' ? Icons.qr_code : Icons.account_balance,
+                                      size: 18,
+                                      color: Colors.grey[600],
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(type),
+                                  ],
+                                ),
                               );
                             }).toList(),
                             onChanged: (value) {
@@ -680,108 +756,199 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                   ],
                 ),
                 
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 
-                // Payment Section
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                // Payment Calculation Section
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppColors.primary.withOpacity(0.1),
+                        AppColors.primary.withOpacity(0.05),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                  ),
+                  child: Column(
+                    children: [
+                      // Total and Cash Input Row
+                      Row(
                         children: [
-                          Text(
-                            'Total',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[700],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.receipt_long,
+                                      color: AppColors.primary,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Total Belanja',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  NumberFormat.currency(
+                                    locale: 'id_ID', 
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0,
+                                  ).format(total),
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            'Rp. ${NumberFormat('#,###').format(total)}',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.payment,
+                                      color: AppColors.primary,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Bayar',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                TextField(
+                                  controller: _cashController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    hintText: '0',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Colors.grey[400]!),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                    prefixText: 'Rp ',
+                                    prefixStyle: const TextStyle(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  onChanged: _onCashChanged,
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Bayar',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Change Amount
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: change >= 0 ? Colors.green[50] : Colors.red[50],
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: change >= 0 ? Colors.green[200]! : Colors.red[200]!,
                           ),
-                          const SizedBox(height: 4),
-                          TextField(
-                            controller: _cashController,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              hintText: '0',
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                              prefixText: 'Rp. ',
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              change >= 0 ? Icons.check_circle : Icons.warning,
+                              color: change >= 0 ? Colors.green[600] : Colors.red[600],
+                              size: 24,
                             ),
-                            onChanged: _onCashChanged,
-                          ),
-                        ],
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Kembalian',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                  Text(
+                                    NumberFormat.currency(
+                                      locale: 'id_ID', 
+                                      symbol: 'Rp ',
+                                      decimalDigits: 0,
+                                    ).format(change >= 0 ? change : 0),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: change >= 0 ? Colors.green[700] : Colors.red[700],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Kembali',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                          Text(
-                            'Rp. ${NumberFormat('#,###').format(change >= 0 ? change : 0)}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: change >= 0 ? Colors.green : Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 
-                const SizedBox(height: 16),
                 
                 // Process Payment Button
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _processPayment,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
+                  child: ElevatedButton.icon(
+                    onPressed: cartItems.isNotEmpty ? _processPayment : null,
+                    icon: const Icon(Icons.payment, size: 24),
+                    label: const Text(
                       'PROSES PEMBAYARAN',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      disabledBackgroundColor: Colors.grey[300],
+                      disabledForegroundColor: Colors.grey[600],
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: cartItems.isNotEmpty ? 2 : 0,
                     ),
                   ),
                 ),
