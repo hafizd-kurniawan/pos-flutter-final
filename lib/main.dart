@@ -159,12 +159,15 @@ class TestModeWelcomeScreen extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 40), // Add top spacing since alignment changed
+                  Icon(
                   Icons.science,
                   size: 100,
                   color: Colors.orange,
@@ -259,6 +262,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
+                          debugPrint('Start Testing button tapped'); // Debug log
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => const MainNavigationPage(),
@@ -286,6 +290,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
+                          debugPrint('Use Login button tapped'); // Debug log
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => const LoginPage(),
@@ -311,6 +316,7 @@ class TestModeWelcomeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 40), // Add bottom spacing for better accessibility
               ],
             ),
           ),
