@@ -18,12 +18,12 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify that test mode welcome screen is displayed
-      expect(find.text('TEST MODE ACTIVE'), findsOneWidget);
-      expect(find.text('Start Testing'), findsOneWidget);
-      expect(find.text('Use Login'), findsOneWidget);
+      expect(find.text('TEST MODE'), findsOneWidget);
+      expect(find.text('MULAI TESTING'), findsOneWidget);
+      expect(find.text('GUNAKAN LOGIN'), findsOneWidget);
 
       // Test that Start Testing button is touchable
-      final startTestingButton = find.text('Start Testing');
+      final startTestingButton = find.text('MULAI TESTING');
       expect(startTestingButton, findsOneWidget);
       
       // Verify button is enabled and touchable
@@ -31,16 +31,17 @@ void main() {
         of: startTestingButton,
         matching: find.byType(ElevatedButton),
       ));
-      expect(button.onPressed, isNotNull, reason: 'Start Testing button should be enabled');
+      expect(button.onPressed, isNotNull, reason: 'MULAI TESTING button should be enabled');
 
       // Test tap on Start Testing button
       await tester.tap(startTestingButton);
       await tester.pumpAndSettle();
 
       // Should navigate to main navigation page
-      expect(find.text('POS'), findsOneWidget);
-      expect(find.text('Jobs'), findsOneWidget);
-      expect(find.text('Customers'), findsOneWidget);
+      expect(find.text('Transaksi'), findsOneWidget);
+      expect(find.text('Penjualan'), findsOneWidget);
+      expect(find.text('Piutang'), findsOneWidget);
+      expect(find.text('Mekanik'), findsOneWidget);
     });
 
     testWidgets('Bottom navigation should be touchable in test mode', (WidgetTester tester) async {
@@ -49,31 +50,29 @@ void main() {
       await tester.pumpAndSettle();
       
       // Tap Start Testing to get to main navigation
-      await tester.tap(find.text('Start Testing'));
+      await tester.tap(find.text('MULAI TESTING'));
       await tester.pumpAndSettle();
 
       // Test bottom navigation touchability
-      expect(find.text('POS'), findsOneWidget);
-      expect(find.text('Jobs'), findsOneWidget);
+      expect(find.text('Transaksi'), findsOneWidget);
+      expect(find.text('Penjualan'), findsOneWidget);
+      expect(find.text('Piutang'), findsOneWidget);
+      expect(find.text('Mekanik'), findsOneWidget);
       
-      // Test tapping Jobs tab
-      await tester.tap(find.text('Jobs'));
+      // Test tapping Penjualan tab
+      await tester.tap(find.text('Penjualan'));
       await tester.pumpAndSettle();
 
-      // Test tapping Customers tab
-      await tester.tap(find.text('Customers'));
+      // Test tapping Piutang tab
+      await tester.tap(find.text('Piutang'));
       await tester.pumpAndSettle();
 
-      // Test tapping Services tab
-      await tester.tap(find.text('Services'));
+      // Test tapping Mekanik tab
+      await tester.tap(find.text('Mekanik'));
       await tester.pumpAndSettle();
 
-      // Test tapping Outlets tab
-      await tester.tap(find.text('Outlets'));
-      await tester.pumpAndSettle();
-
-      // Test tapping POS tab to return to start
-      await tester.tap(find.text('POS'));
+      // Test tapping Transaksi tab to return to start
+      await tester.tap(find.text('Transaksi'));
       await tester.pumpAndSettle();
     });
 
@@ -85,7 +84,7 @@ void main() {
       expect(find.text('TEST MODE'), findsWidgets);
       
       // Navigate to main navigation and check badge is still there
-      await tester.tap(find.text('Start Testing'));
+      await tester.tap(find.text('MULAI TESTING'));
       await tester.pumpAndSettle();
       
       expect(find.text('TEST MODE'), findsOneWidget);
@@ -96,7 +95,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Find and tap Use Login button
-      final useLoginButton = find.text('Use Login');
+      final useLoginButton = find.text('GUNAKAN LOGIN');
       expect(useLoginButton, findsOneWidget);
       
       // Verify button is enabled
@@ -104,7 +103,7 @@ void main() {
         of: useLoginButton,
         matching: find.byType(ElevatedButton),
       ));
-      expect(button.onPressed, isNotNull, reason: 'Use Login button should be enabled');
+      expect(button.onPressed, isNotNull, reason: 'GUNAKAN LOGIN button should be enabled');
 
       // Test tap on Use Login button
       await tester.tap(useLoginButton);
@@ -112,6 +111,31 @@ void main() {
 
       // Should navigate to login page (may show login form or different content)
       // This depends on the actual login page implementation
+    });
+
+    testWidgets('BLoC providers should be accessible from widget tree', (WidgetTester tester) async {
+      await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
+
+      // Navigate to main navigation
+      await tester.tap(find.text('MULAI TESTING'));
+      await tester.pumpAndSettle();
+
+      // The navigation should work without runtime errors, indicating BLoCs are properly provided
+      expect(find.text('TRANSAKSI TOKO'), findsOneWidget);
+      
+      // Test navigation between different tabs that use different BLoCs
+      await tester.tap(find.text('Penjualan'));
+      await tester.pumpAndSettle();
+      // If this doesn't crash, the BLoCs are working
+
+      await tester.tap(find.text('Piutang'));
+      await tester.pumpAndSettle();
+      // If this doesn't crash, the BLoCs are working
+
+      await tester.tap(find.text('Mekanik'));
+      await tester.pumpAndSettle();
+      // If this doesn't crash, the ServiceJobBloc is working
     });
   });
 }
