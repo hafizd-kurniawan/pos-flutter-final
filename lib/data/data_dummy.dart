@@ -1,5 +1,9 @@
 import 'package:flutter_pos_responsive_app/data/models/response/category_response_model.dart';
 import 'package:flutter_pos_responsive_app/data/models/response/product_sales_report.dart';
+import 'package:flutter_pos_responsive_app/data/models/response/outlet_response_model.dart';
+import 'package:flutter_pos_responsive_app/data/models/response/customer_response_model.dart';
+import 'package:flutter_pos_responsive_app/data/models/response/service_job_response_model.dart';
+import 'package:flutter_pos_responsive_app/data/models/response/service_response_model.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/models/category_model.dart';
 import 'package:flutter_pos_responsive_app/presentation/order/models/order_model.dart';
 

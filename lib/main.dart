@@ -4,18 +4,26 @@ import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/auth_local_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/auth_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/category_remote_datasource.dart';
+import 'package:flutter_pos_responsive_app/data/datasource/customer_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/order_remote_datasource.dart';
+import 'package:flutter_pos_responsive_app/data/datasource/outlet_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/product_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/data/datasource/report_remote_datasource.dart';
+import 'package:flutter_pos_responsive_app/data/datasource/service_job_remote_datasource.dart';
+import 'package:flutter_pos_responsive_app/data/datasource/service_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/bloc/login/login_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/bloc/logout/logout_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/auth/pages/login_page.dart';
+import 'package:flutter_pos_responsive_app/presentation/customer/bloc/customer_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/history/bloc/history/history_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/category/category_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/product/product_bloc.dart';
-import 'package:flutter_pos_responsive_app/presentation/home/pages/dashboard_page.dart';
+import 'package:flutter_pos_responsive_app/presentation/welcome_screen.dart';
 import 'package:flutter_pos_responsive_app/presentation/order/bloc/order/order_bloc.dart';
+import 'package:flutter_pos_responsive_app/presentation/outlet/bloc/outlet_bloc.dart';
+import 'package:flutter_pos_responsive_app/presentation/service/bloc/service_bloc.dart';
+import 'package:flutter_pos_responsive_app/presentation/service_job/bloc/service_job_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/setting/bloc/product_sales/product_sales_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/setting/bloc/summary/summary_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/tablet/home/pages/dashboard_tablet_page.dart';
@@ -50,6 +58,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ProductSalesBloc(ReportRemoteDatasource()),
         ),
+        // New BLoC providers for enhanced POS features
+        BlocProvider(create: (context) => OutletBloc(OutletRemoteDatasource())),
+        BlocProvider(create: (context) => CustomerBloc(CustomerRemoteDatasource())),
+        BlocProvider(create: (context) => ServiceBloc(ServiceRemoteDatasource())),
+        BlocProvider(create: (context) => ServiceJobBloc(ServiceJobRemoteDatasource())),
       ],
       child: MaterialApp(
         title: 'POS Responsive FIC 23',
@@ -83,7 +96,7 @@ class MyApp extends StatelessWidget {
                 // Return the tablet dashboard page
                 return DashboardTabletPage();
               }
-              return DashboardPage();
+              return const WelcomeScreen();
             } else {
               // If not authenticated, show the login page
               return const LoginPage();
