@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos_responsive_app/core/constants/colors.dart';
 import 'package:flutter_pos_responsive_app/data/data_dummy.dart';
 import 'package:flutter_pos_responsive_app/data/models/response/product_response_model.dart';
+import 'package:flutter_pos_responsive_app/data/models/response/customer_response_model.dart';
+import 'package:flutter_pos_responsive_app/data/datasource/customer_remote_datasource.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_pos_responsive_app/presentation/home/models/order_item.dart';
 import 'package:flutter_pos_responsive_app/presentation/cashier/widgets/product_selection_dialog.dart';
+import 'package:flutter_pos_responsive_app/presentation/cashier/widgets/customer_selection_dialog.dart';
+import 'package:flutter_pos_responsive_app/presentation/customer/bloc/customer_bloc.dart';
 import 'package:intl/intl.dart';
 
 class CashierTransactionPage extends StatefulWidget {
@@ -19,7 +23,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
   final TextEditingController _barcodeController = TextEditingController();
   final TextEditingController _cashController = TextEditingController();
   
-  String selectedCustomer = 'Customer Umum';
+  Customer? selectedCustomer;
   String paymentType = 'Cash';
   String invoiceNumber = '';
   
@@ -32,6 +36,13 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
   void initState() {
     super.initState();
     _generateInvoiceNumber();
+    // Set default customer
+    selectedCustomer = Customer(
+      id: 1,
+      name: 'Customer Umum',
+      phone: '',
+      address: '',
+    );
   }
 
   void _generateInvoiceNumber() {
@@ -156,80 +167,140 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
         children: [
           // Header Section
           Container(
-            padding: const EdgeInsets.all(16),
-            color: Colors.grey[50],
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.grey[50]!,
+                  Colors.grey[100]!,
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
             child: Column(
               children: [
                 // Invoice and Barcode Row
                 Row(
                   children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'No. Invoice:',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey[200]!),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.receipt,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'No. Invoice',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            invoiceNumber,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
+                            const SizedBox(height: 8),
+                            Text(
+                              invoiceNumber,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 16),
                     Expanded(
                       flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Barcode / Kode Barang',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: _barcodeController,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Scan atau ketik kode barang',
-                                    border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 8,
-                                    ),
-                                  ),
-                                  onSubmitted: _searchProduct,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey[200]!),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.qr_code_scanner,
+                                  color: AppColors.primary,
+                                  size: 20,
                                 ),
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => ProductSelectionDialog(
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Barcode / Kode Barang',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _barcodeController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Scan atau ketik kode barang',
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 12,
+                                      ),
+                                      prefixIcon: const Icon(Icons.search),
+                                    ),
+                                    onSubmitted: _searchProduct,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => ProductSelectionDialog(
                                       onProductSelected: _addProductToCart,
                                     ),
                                   );
                                 },
                                 icon: const Icon(Icons.add),
-                                label: const Text('Pilih Barang'),
+                                label: const Text('Pilih'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
                                   foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                 ),
                               ),
                             ],
@@ -239,57 +310,27 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                     ),
                   ],
                 ),
-                
-                // Quick Access Buttons for Common Items
-                const SizedBox(height: 16),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Item Cepat:',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: dummyProducts.take(4).map((product) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: ElevatedButton(
-                          onPressed: () => _addProductToCart(product),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: AppColors.primary,
-                            side: const BorderSide(color: AppColors.primary),
-                          ),
-                          child: Text(
-                            product.name!.length > 15 
-                                ? '${product.name!.substring(0, 15)}...'
-                                : product.name!,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
               ],
             ),
           ),
           
           // Cart Items Table
           Expanded(
-            child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   // Table Header
                   Container(
-                    color: AppColors.primary,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    margin: const EdgeInsets.only(top: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     child: const Row(
                       children: [
                         Expanded(
@@ -299,16 +340,18 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                         ),
                         Expanded(
                           flex: 3,
                           child: Text(
-                            'Nama',
+                            'Nama Barang',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -319,6 +362,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -329,6 +373,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -339,6 +384,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -349,6 +395,7 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -356,53 +403,89 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                     ),
                   ),
                   
-                  // Cart Items
-                  if (cartItems.isEmpty)
-                    Container(
-                      padding: const EdgeInsets.all(32),
-                      child: const Text(
-                        'Belum ada barang yang dipilih',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
+                  // Cart Items Container
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
                         ),
+                        border: Border.all(color: Colors.grey[200]!),
                       ),
-                    )
-                  else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: cartItems.length,
-                      itemBuilder: (context, index) {
-                        final item = cartItems[index];
-                        final subtotal = int.parse(item.product.price!) * item.quantity;
-                        
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: Colors.grey[300]!),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text('${index + 1}'),
+                      child: cartItems.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.shopping_cart_outlined,
+                                    size: 64,
+                                    color: Colors.grey[400],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    'Belum ada barang yang dipilih',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Scan barcode atau pilih barang untuk menambahkan ke keranjang',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[500],
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  item.product.name!,
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
+                            )
+                          : ListView.builder(
+                              itemCount: cartItems.length,
+                              itemBuilder: (context, index) {
+                                final item = cartItems[index];
+                                final subtotal = int.parse(item.product.price!) * item.quantity;
+                                
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                    horizontal: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: index % 2 == 0 ? Colors.grey[50] : Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Text(
+                                          '${index + 1}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Text(
+                                          item.product.name!,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
                                   'Rp. ${NumberFormat('#,###').format(int.parse(item.product.price!))}',
                                   style: const TextStyle(fontSize: 14),
                                 ),
@@ -504,23 +587,58 @@ class _CashierTransactionPageState extends State<CashierTransactionPage> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          DropdownButtonFormField<String>(
-                            value: selectedCustomer,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            ),
-                            items: dummyCustomers.map((customer) {
-                              return DropdownMenuItem<String>(
-                                value: customer['name'],
-                                child: Text(customer['name']),
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => BlocProvider(
+                                  create: (context) => CustomerBloc(
+                                    CustomerRemoteDatasource(),
+                                  ),
+                                  child: CustomerSelectionDialog(
+                                    selectedCustomer: selectedCustomer,
+                                    onCustomerSelected: (customer) {
+                                      setState(() {
+                                        selectedCustomer = customer;
+                                      });
+                                    },
+                                  ),
+                                ),
                               );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedCustomer = value!;
-                              });
                             },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey[400]!),
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.person,
+                                    color: Colors.grey[600],
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      selectedCustomer?.name ?? 'Pilih Customer',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: selectedCustomer != null 
+                                            ? Colors.black87 
+                                            : Colors.grey[600],
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.grey[600],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
